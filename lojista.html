@@ -261,8 +261,9 @@ body{font-family:var(--font);background:var(--bg);color:var(--ns);min-height:100
 /* tempo analise */
 .tm-label{font-size:14px;color:var(--nm);line-height:24px}
 .tm-val{font-size:14px;color:var(--ns);font-weight:500;line-height:24px}
-/* finalizados — layout simples mantido */
-.solic-f{background:#fff;border:1px solid var(--nsoft);border-radius:12px;padding:20px 24px;display:flex;align-items:center;gap:16px}
+/* finalizados — colunas extras */
+.solic-c .c-res2{width:180px;flex-shrink:0}
+.solic-c .c-vr{flex:1}
 .solic-info{flex:1}
 .solic-title{font-size:16px;font-weight:500;color:var(--ns);line-height:24px}
 .solic-sub{font-size:14px;color:var(--nm);margin-top:2px;line-height:24px}
@@ -771,78 +772,36 @@ body{font-family:var(--font);background:var(--bg);color:var(--ns);min-height:100
   <div class="ml-ft"><button class="btn-s" onclick="cml('ml-open')">fechar</button></div>
 </div></div>
 
-<!-- MODAL FINAL REEMBOLSADO -->
-<div class="mlov" id="ml-suc"><div class="ml-wide">
-  <button class="ml-x" onclick="cml('ml-suc')"><svg viewBox="0 0 24 24" fill="none" stroke="#5e5d5a" stroke-width="1.5"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
-  <div class="ml-t">Detalhes da solicitacao de reembolso</div>
-  <div class="det-sec">
-    <div class="det-sec-ttl">Resultado na analise</div>
-    <span class="det-res-badge-ok">reembolsado</span>
-    <div class="det-grid2">
-      <div><div class="det-field-lbl">Valor do reembolso</div><div class="det-field-val" id="ms-vr">—</div><div class="det-lnk">ver extrato <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 3H3a1 1 0 00-1 1v9a1 1 0 001 1h9a1 1 0 001-1V9M10 2h4v4M14 2L8 8"/></svg></div></div>
-      <div><div class="det-field-lbl">Data</div><div class="det-field-val" id="ms-data">—</div></div>
+<!-- MODAL FINALIZADO UNIFICADO -->
+<div class="mlov" id="ml-final-solic"><div class="ml">
+  <button class="ml-x" onclick="cml('ml-final-solic')"><svg viewBox="0 0 24 24" fill="none" stroke="#5e5d5a" stroke-width="1.5"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+  <div class="ml-hdr">
+    <div class="ml-t">Detalhes da solicitacao de reembolso</div>
+  </div>
+  <div class="ml-body">
+    <div class="ml-sec-title">Resultado na analise</div>
+    <div id="mfs-resultado"></div>
+    <hr class="ml-divider">
+    <div class="ml-sec-title">Resumo</div>
+    <div class="ml-grid2">
+      <div><div class="ml-field-lbl">Nota fiscal</div><div class="ml-field-val" id="mfs-nf">—</div></div>
+      <div><div class="ml-field-lbl">Destinatario</div><div class="ml-field-val" id="mfs-dest">—</div></div>
+      <div><div class="ml-field-lbl">Transportadora</div><div class="ml-field-val">Correios</div></div>
+      <div><div class="ml-field-lbl">Valor da NF</div><div class="ml-field-val" id="mfs-val">—</div></div>
+      <div><div class="ml-field-lbl">Codigo de rastreio etiqueta 1</div><div class="ml-field-val">AK147145677BR</div></div>
+      <div><div class="ml-field-lbl">Status etiqueta 1</div><div class="ml-field-val">Entregue</div></div>
+      <div><div class="ml-field-lbl">Codigo de rastreio etiqueta 2</div><div class="ml-field-val">AK147145688BR</div></div>
+      <div><div class="ml-field-lbl">Status etiqueta 2</div><div class="ml-field-val">Aguardando envio</div></div>
+    </div>
+    <hr class="ml-divider">
+    <div class="ml-sec-title">Informacoes adicionais do lojista</div>
+    <div class="ml-info-text" id="mfs-info">Sem informacoes adicionais.</div>
+    <div class="ml-files">
+      <div class="ml-file"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 2h6l4 4v8a1 1 0 01-1 1H4a1 1 0 01-1-1V3a1 1 0 011-1z"/><path d="M10 2v4h4"/></svg>arquivo 01.png</div>
+      <div class="ml-file"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 2h6l4 4v8a1 1 0 01-1 1H4a1 1 0 01-1-1V3a1 1 0 011-1z"/><path d="M10 2v4h4"/></svg>arquivo 02.pdf</div>
     </div>
   </div>
-  <div class="det-sec">
-    <div class="det-sec-ttl">Resumo</div>
-    <div class="det-grid2">
-      <div><div class="det-field-lbl">Nota fiscal</div><div class="det-field-val" id="ms-nf">—</div></div>
-      <div><div class="det-field-lbl">Destinatario</div><div class="det-field-val" id="ms-dest">—</div></div>
-      <div><div class="det-field-lbl">Transportadora</div><div class="det-field-val">Correios</div></div>
-      <div><div class="det-field-lbl">Valor da NF</div><div class="det-field-val" id="ms-val">—</div></div>
-    </div>
-  </div>
-</div></div>
-
-<!-- MODAL FINAL PARCIAL -->
-<div class="mlov" id="ml-par"><div class="ml-wide">
-  <button class="ml-x" onclick="cml('ml-par')"><svg viewBox="0 0 24 24" fill="none" stroke="#5e5d5a" stroke-width="1.5"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
-  <div class="ml-t">Detalhes da solicitacao de reembolso</div>
-  <div class="det-sec">
-    <div class="det-sec-ttl">Resultado na analise</div>
-    <span class="det-res-badge-par">reembolso parcial</span>
-    <div class="det-grid2">
-      <div><div class="det-field-lbl">Valor do reembolso</div><div class="det-field-val" id="mp-vr">—</div></div>
-      <div><div class="det-field-lbl">Data</div><div class="det-field-val" id="mp-data">—</div></div>
-      <div style="grid-column:1/-1"><div class="det-field-lbl">Motivo</div><div class="det-field-val" id="mp-motivo">—</div></div>
-    </div>
-  </div>
-  <div class="det-sec">
-    <div class="det-sec-ttl">Resumo</div>
-    <div class="det-grid2">
-      <div><div class="det-field-lbl">Nota fiscal</div><div class="det-field-val" id="mp-nf">—</div></div>
-      <div><div class="det-field-lbl">Destinatario</div><div class="det-field-val" id="mp-dest">—</div></div>
-      <div><div class="det-field-lbl">Transportadora</div><div class="det-field-val">Correios</div></div>
-      <div><div class="det-field-lbl">Valor da NF</div><div class="det-field-val" id="mp-val">—</div></div>
-    </div>
-  </div>
-</div></div>
-
-<!-- MODAL FINAL NEGADO -->
-<div class="mlov" id="ml-neg"><div class="ml-wide">
-  <button class="ml-x" onclick="cml('ml-neg')"><svg viewBox="0 0 24 24" fill="none" stroke="#5e5d5a" stroke-width="1.5"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
-  <div class="ml-t">Detalhes da solicitacao de reembolso</div>
-  <div class="det-sec">
-    <div class="det-sec-ttl">Resultado na analise</div>
-    <span class="det-res-badge-neg">nao reembolsado</span>
-    <div class="det-grid2">
-      <div><div class="det-field-lbl">Motivo</div><div class="det-field-val" id="mn-motivo">—</div></div>
-      <div><div class="det-field-lbl">Data</div><div class="det-field-val" id="mn-data">—</div></div>
-    </div>
-  </div>
-  <div class="det-sec">
-    <div class="det-sec-ttl">Resumo</div>
-    <div class="det-grid2">
-      <div><div class="det-field-lbl">Nota fiscal</div><div class="det-field-val" id="mn-nf">—</div></div>
-      <div><div class="det-field-lbl">Destinatario</div><div class="det-field-val" id="mn-dest">—</div></div>
-      <div><div class="det-field-lbl">Transportadora</div><div class="det-field-val">Correios</div></div>
-      <div><div class="det-field-lbl">Valor da NF</div><div class="det-field-val" id="mn-val">—</div></div>
-    </div>
-  </div>
-  <div style="padding-top:20px;display:flex;justify-content:flex-end;gap:12px;border-top:1px solid var(--nsoft)">
-    <button class="btn-s" onclick="cml('ml-neg')">fechar</button>
-    <button class="btn-p" onclick="reabrirSolic()">Reabrir solicitacao</button>
-  </div>
+  <div class="ml-ft"><button class="btn-s" onclick="cml('ml-final-solic')">fechar</button></div>
 </div></div>
 
 <script>
@@ -863,7 +822,7 @@ function seedLojista(){
     {id:'REE-00000001',nf:'82630312',destinatario:'Gustavo Moreira Farias Silva',dest:'Gustavo Moreira Farias Silva',chamado:'CHM-2024-00847',ch:'CHM-2024-00847',status:'em_analise',valor:'R$ 226,24',val:'R$ 226,24',data:fmtDate(n-1*d),ts:n-1*d,timestamp:n-1*d},
     {id:'REE-00000002',nf:'55566677788',destinatario:'Carlos Eduardo Lima',dest:'Carlos Eduardo Lima',chamado:'CHM-2024-01234',ch:'CHM-2024-01234',status:'em_analise',valor:'R$ 350,00',val:'R$ 350,00',data:fmtDate(n-2*d),ts:n-2*d,timestamp:n-2*d},
     {id:'REE-00000010',nf:'11122233344',destinatario:'Maria Santos Oliveira',dest:'Maria Santos Oliveira',chamado:'CHM-2024-00500',ch:'CHM-2024-00500',status:'reembolsado',valor:'R$ 180,00',val:'R$ 180,00',vr:'R$ 180,00',valorReembolsado:'R$ 180,00',nota:'Solicitacao aprovada integralmente. Valor creditado na Carteira Envios.',decisaoNota:'Solicitacao aprovada integralmente.',data:fmtDate(n-5*d),ts:n-5*d,timestamp:n-5*d},
-    {id:'REE-00000011',nf:'99988877766',destinatario:'Ana Paula Costa',dest:'Ana Paula Costa',chamado:'CHM-2024-00600',ch:'CHM-2024-00600',status:'parcial',valor:'R$ 420,00',val:'R$ 420,00',vr:'R$ 210,00',valorReembolsado:'R$ 210,00',nota:'Aprovacao parcial. 50% coberto conforme apolice vigente.',decisaoNota:'Aprovacao parcial. 50% coberto conforme apolice vigente.',data:fmtDate(n-6*d),ts:n-6*d,timestamp:n-6*d},
+    {id:'REE-00000011',nf:'99988877766',destinatario:'Ana Paula Costa',dest:'Ana Paula Costa',chamado:'CHM-2024-00600',ch:'CHM-2024-00600',status:'parcial',valor:'R$ 420,00',val:'R$ 420,00',vr:'R$ 210,00',valorReembolsado:'R$ 210,00',nota:'O outro pacote foi entregue.',decisaoNota:'O outro pacote foi entregue.',data:fmtDate(n-6*d),ts:n-6*d,timestamp:n-6*d},
     {id:'REE-00000012',nf:'33344455566',destinatario:'Roberto Silva Nunes',dest:'Roberto Silva Nunes',chamado:'CHM-2024-00700',ch:'CHM-2024-00700',status:'negado',valor:'R$ 290,00',val:'R$ 290,00',vr:'R$ 0,00',valorReembolsado:'R$ 0,00',nota:'Pedido entregue conforme rastreio. Prazo minimo nao atingido.',decisaoNota:'Pedido entregue conforme rastreio.',data:fmtDate(n-7*d),ts:n-7*d,timestamp:n-7*d},
   ]);
 }
@@ -1035,10 +994,43 @@ function renderFinalList(){
   const list=getS().filter(s=>s.status!=='em_analise');
   const c=document.getElementById('final-list');
   if(!list.length){c.innerHTML='<div class="empty-st"><p>Nenhuma solicitacao finalizada</p></div>';return}
-  const bdg={reembolsado:'bdg-r',parcial:'bdg-par',negado:'bdg-neg'};
-  const lbl={reembolsado:'Reembolsado',parcial:'Parcialmente Reembolsado',negado:'Reembolso Negado'};
-  const mod={reembolsado:'openFinalSuc',parcial:'openFinalPar',negado:'openFinalNeg'};
-  c.innerHTML=list.map(s=>`<div class="solic-f"><div class="solic-info"><div class="solic-title">NF ${s.nf} — ${s.destinatario||s.dest||''}</div><div class="solic-sub">Valor: ${s.valor||s.val||''}</div><div class="solic-meta">Finalizado em ${s.data}</div></div><span class="${bdg[s.status]||'bdg-an'}">${lbl[s.status]||s.status}</span><div class="solic-acts"><button class="btn-s" onclick="${mod[s.status]||'openFinalSuc'}('${s.id}')">Ver solicitacao</button></div></div>`).join('');
+  const bdgCls={reembolsado:'bdg-r',parcial:'bdg-par',negado:'bdg-neg'};
+  const bdgLbl={reembolsado:'reembolsado',parcial:'reembolso parcial',negado:'nao reembolsado'};
+  c.innerHTML=list.map(s=>{
+    const dest=s.destinatario||s.dest||'';
+    const nf=s.nf||'';
+    const val=s.valor||s.val||'';
+    const ddid='dd-final-'+s.id;
+    const vr=s.vr||s.valorReembolsado||'';
+    const motivo=s.nota||s.decisaoNota||'';
+    // coluna resultado varia por status
+    let resCol='';
+    if(s.status==='reembolsado'){
+      resCol=`<div class="c-res2"><div class="lbl">Resultado da analise</div><span class="${bdgCls[s.status]}">${bdgLbl[s.status]}</span><div class="val-sm" style="margin-top:4px">${s.data}</div></div><div class="c-vr"><div class="lbl">Valor do reembolso</div><div class="val">${vr}</div></div>`;
+    } else if(s.status==='parcial'){
+      resCol=`<div class="c-res2"><div class="lbl">Resultado da analise</div><span class="${bdgCls[s.status]}">${bdgLbl[s.status]}</span><div class="val-sm" style="margin-top:4px">${s.data}</div></div><div class="c-vr"><div class="lbl">Valor do reembolso</div><div class="val">${vr}</div><div class="lbl" style="margin-top:8px">Motivo</div><div class="val-sm">${motivo}</div></div>`;
+    } else {
+      resCol=`<div class="c-res2"><div class="lbl">Resultado da analise</div><span class="${bdgCls[s.status]}">${bdgLbl[s.status]}</span><div class="val-sm" style="margin-top:4px">${s.data}</div></div><div class="c-vr"><div class="lbl">Motivo</div><div class="val-sm">${motivo}</div></div>`;
+    }
+    // dropdown varia por status
+    let ddItems='';
+    if(s.status==='reembolsado'||s.status==='parcial'){
+      ddItems=`<div class="more-it" onclick="openFinalSolic('${s.id}')">Ver solicitacao</div><div class="more-it" onclick="openFinalReemb('${s.id}')">Ver reembolso</div>`;
+    } else {
+      ddItems=`<div class="more-it" onclick="openFinalSolic('${s.id}')">Ver solicitacao</div><div class="more-it" onclick="openSolic('${nf}','${dest}')">Reabrir solicitacao</div>`;
+    }
+    return`<div class="solic-c">
+      <div class="c-dt"><div class="dt-main">${s.data}</div><div class="dt-time">15h35</div></div>
+      <div class="c-rec"><div class="val">${dest}</div><div class="val-sm">Estacio de Sa, 1369</div><div class="val-sm">Maringa / PR</div><div class="val-sm">87005-020</div><div class="val-sm">CPF 123.456.789-00</div></div>
+      <div class="c-nf"><div class="lbl">Nota Fiscal</div><div class="val strong">${nf}</div></div>
+      <div class="c-val"><div class="lbl">Valor NF</div><div class="val">${val}</div></div>
+      ${resCol}
+      <div class="c-act2"><div class="more-btn" onclick="tglMore(event,'${ddid}')">
+        <svg viewBox="0 0 20 6" fill="currentColor" width="20" height="20"><circle cx="2" cy="3" r="2"/><circle cx="10" cy="3" r="2"/><circle cx="18" cy="3" r="2"/></svg>
+        <div class="more-dd" id="${ddid}">${ddItems}</div>
+      </div></div>
+    </div>`;
+  }).join('');
 }
 function cancelS(id){setS(getS().filter(s=>s.id!==id));renderOpenList()}
 
@@ -1053,44 +1045,37 @@ function openOpenDet(id){
   document.getElementById('mop-info').textContent=s.descricao||'Sem informacoes adicionais.';
   oml('ml-open');
 }
-function openFinalSuc(id){
+// abre modal unificado de finalizado (ver solicitacao)
+function openFinalSolic(id){
   const s=getS().find(x=>x.id===id);if(!s)return;
-  document.getElementById('ms-nf').textContent=s.nf;
-  document.getElementById('ms-dest').textContent=s.destinatario||s.dest||'';
-  document.getElementById('ms-val').textContent=s.valor||s.val||'';
-  document.getElementById('ms-vr').textContent=s.vr||s.valorReembolsado||'';
-  document.getElementById('ms-data').textContent=s.data;
-  oml('ml-suc');
+  const dt=s.data+' 15h35';
+  // preenche resultado na analise
+  const statusMap={reembolsado:{cls:'bdg-r',lbl:'reembolsado'},parcial:{cls:'bdg-par',lbl:'reembolso parcial'},negado:{cls:'bdg-neg',lbl:'nao reembolsado'}};
+  const st=statusMap[s.status]||{cls:'bdg-an',lbl:s.status};
+  const vr=s.vr||s.valorReembolsado||'';
+  const motivo=s.nota||s.decisaoNota||'';
+  let resultHtml=`<span class="${st.cls}" style="border-radius:9999px;padding:4px 12px;font-size:13px;font-weight:600;display:inline-block;margin-bottom:12px">${st.lbl}</span>`;
+  if(s.status==='reembolsado'){
+    resultHtml+=`<div class="ml-grid2" style="margin-top:4px"><div><div class="ml-field-lbl">Valor do reembolso</div><div class="ml-field-val">${vr}</div><div style="font-size:13px;color:var(--primary-base);display:flex;align-items:center;gap:4px;cursor:pointer">ver extrato <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" width="12" height="12"><path d="M7 3H3a1 1 0 00-1 1v9a1 1 0 001 1h9a1 1 0 001-1V9M10 2h4v4M14 2L8 8"/></svg></div></div><div><div class="ml-field-lbl">Data</div><div class="ml-field-val">${dt}</div></div></div>`;
+  } else if(s.status==='parcial'){
+    resultHtml+=`<div class="ml-grid2" style="margin-top:4px"><div><div class="ml-field-lbl">Motivo</div><div class="ml-field-val">${motivo}</div><div style="font-size:13px;color:var(--primary-base);display:flex;align-items:center;gap:4px;cursor:pointer">ver extrato <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" width="12" height="12"><path d="M7 3H3a1 1 0 00-1 1v9a1 1 0 001 1h9a1 1 0 001-1V9M10 2h4v4M14 2L8 8"/></svg></div></div><div><div class="ml-field-lbl">Data</div><div class="ml-field-val">${dt}</div></div></div>`;
+  } else {
+    resultHtml+=`<div class="ml-grid2" style="margin-top:4px"><div><div class="ml-field-lbl">Motivo</div><div class="ml-field-val">${motivo}</div></div><div><div class="ml-field-lbl">Data</div><div class="ml-field-val">${dt}</div></div></div>`;
+  }
+  document.getElementById('mfs-resultado').innerHTML=resultHtml;
+  document.getElementById('mfs-nf').textContent=s.nf;
+  document.getElementById('mfs-dest').textContent=s.destinatario||s.dest||'';
+  document.getElementById('mfs-val').textContent=s.valor||s.val||'';
+  document.getElementById('mfs-info').textContent=s.descricao||'Sem informacoes adicionais.';
+  oml('ml-final-solic');
 }
-function openFinalPar(id){
-  const s=getS().find(x=>x.id===id);if(!s)return;
-  document.getElementById('mp-nf').textContent=s.nf;
-  document.getElementById('mp-dest').textContent=s.destinatario||s.dest||'';
-  document.getElementById('mp-val').textContent=s.valor||s.val||'';
-  document.getElementById('mp-vr').textContent=s.vr||s.valorReembolsado||'';
-  document.getElementById('mp-data').textContent=s.data;
-  document.getElementById('mp-motivo').textContent=s.nota||s.decisaoNota||'';
-  oml('ml-par');
-}
-let _negId='',_negNF='',_negDest='';
-function openFinalNeg(id){
-  const s=getS().find(x=>x.id===id);if(!s)return;
-  _negId=id;_negNF=s.nf;_negDest=s.destinatario||s.dest||'';
-  document.getElementById('mn-nf').textContent=s.nf;
-  document.getElementById('mn-dest').textContent=_negDest;
-  document.getElementById('mn-val').textContent=s.valor||s.val||'';
-  document.getElementById('mn-data').textContent=s.data;
-  document.getElementById('mn-motivo').textContent=s.nota||s.decisaoNota||'';
-  oml('ml-neg');
-}
+// ver reembolso — abre drawer simples (proto: mesmo modal simplificado)
+function openFinalReemb(id){ openFinalSolic(id); }
 function openFinalByStatus(st){
   const s=getS().find(x=>x.status===st);
   if(!s)return;
-  if(st==='reembolsado')openFinalSuc(s.id);
-  else if(st==='parcial')openFinalPar(s.id);
-  else openFinalNeg(s.id);
+  openFinalSolic(s.id);
 }
-function reabrirSolic(){cml('ml-neg');openSolic(_negNF,_negDest)}
 function oml(id){document.getElementById(id).classList.add('on')}
 function cml(id){document.getElementById(id).classList.remove('on')}
 

@@ -188,7 +188,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--ns);min-height:100
 
 /* search */
 .srch-lbl{font-size:16px;color:var(--ns);margin-bottom:16px;line-height:24px}
-.srch-bar{display:flex;border:1px solid var(--nsoft);border-radius:8px;overflow:hidden;background:#fff;height:48px;width:718px}
+.srch-bar{display:flex;border:1px solid var(--nsoft);border-radius:8px;overflow:visible;background:#fff;height:48px;width:718px}
 .srch-left{flex:1;display:flex;align-items:center;gap:12px;padding:0 12px 0 16px;min-width:0}
 .srch-left svg{width:24px;height:24px;flex-shrink:0;opacity:.5}
 .srch-left input{border:none;outline:none;background:transparent;font-size:16px;font-family:var(--font);color:var(--ns);flex:1;min-width:0}
@@ -604,11 +604,11 @@ body{font-family:var(--font);background:var(--bg);color:var(--ns);min-height:100
                   <input type="text" id="si" placeholder="bucar por" oninput="doSearch(this.value)">
                 </div>
                 <div class="srch-flt" id="flt-btn" onclick="tglFlt(event)">
-                  <span id="flt-lbl">Numero da nota fiscal</span>
+                  <span id="flt-lbl">Numero da Nota Fiscal</span>
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
                   <div class="flt-dd" id="flt-dd">
-                    <div class="flt-opt sel" onclick="selFlt('Numero da nota fiscal',event)">Numero da nota fiscal</div>
-                    <div class="flt-opt" onclick="selFlt('Codigo do rastreio',event)">Codigo do rastreio</div>
+                    <div class="flt-opt sel" onclick="selFlt('Numero da Nota Fiscal','nf',event)">Numero da Nota Fiscal</div>
+                    <div class="flt-opt" onclick="selFlt('Codigo do rastreio','rastreio',event)">Codigo do rastreio</div>
                   </div>
                 </div>
               </div>
@@ -884,12 +884,16 @@ function swTab(t){
 
 // === FILTER ===
 function tglFlt(e){e.stopPropagation();document.getElementById('flt-dd').classList.toggle('on')}
-function selFlt(l,e){
+function selFlt(l,tipo,e){
   e.stopPropagation();
   document.getElementById('flt-lbl').textContent=l;
   document.querySelectorAll('.flt-opt').forEach(o=>o.classList.remove('sel'));
   e.target.classList.add('sel');
   document.getElementById('flt-dd').classList.remove('on');
+  const ph={nf:'Ex: 82630312',rastreio:'Ex: AK147145677BR'};
+  document.getElementById('si').placeholder=ph[tipo]||'buscar por';
+  document.getElementById('si').value='';
+  document.getElementById('srch-res').innerHTML='';
 }
 
 // === SEARCH ===
@@ -927,7 +931,12 @@ function renderSearch(v){
     c.innerHTML=`<div class="rc">${recCols(p)}<div class="c-res"><div class="lbl">Resultado da analise</div><span class="bdg-nao">nao reembolsado</span><div class="val-sm" style="margin-top:4px">${p.dataAn}</div></div><div class="c-mot"><div class="lbl">Motivo</div><div class="val">${p.motivo}</div></div><div class="c-act"><div class="more-btn" onclick="tglMore(event,'md-005')"><svg viewBox="0 0 4 16"><circle cx="2" cy="2" r="1.5" fill="currentColor"/><circle cx="2" cy="8" r="1.5" fill="currentColor"/><circle cx="2" cy="14" r="1.5" fill="currentColor"/></svg><div class="more-dd" id="md-005"><div class="more-it" onclick="openFinalByStatus('negado')">ver solicitacao</div><div class="more-it" onclick="openSolic('${p.nf}','${p.name}')">reabrir solicitacao</div></div></div></div></div>`;return;
   }
 }
-function tglMore(e,id){e.stopPropagation();document.getElementById(id).classList.toggle('on')}
+function tglMore(e,id){
+  e.stopPropagation();
+  const isOpen=document.getElementById(id).classList.contains('on');
+  document.querySelectorAll('.more-dd.on').forEach(dd=>dd.classList.remove('on'));
+  if(!isOpen)document.getElementById(id).classList.add('on');
+}
 
 // === SOLICITAR ===
 let _curNF='',_curDest='';

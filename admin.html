@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Backoffice — Reembolso Garantido</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#fcfbf8;--white:#fff;
+  --primary:#0c29d0;--primary-base:#043fbe;--primary-strong:#0b134a;
+  --primary-soft:#e7edf8;--primary-softer:#f0f4fd;
+  --ns:#312f4f;--nm:#5e5d5a;--nb:#8f8d85;--nsoft:#e8e5d9;
+  --ok:#16a34a;--ok-bg:#f0fdf4;--ok-soft:#c9ffee;--ok-str:#054933;
+  --err:#e64e36;--err-bg:#ffeae5;
+  --warn-bg:#fff3d1;--warn-str:#92400e;
+  --blue-soft:#e6eeff;
+  --font:'Plus Jakarta Sans',sans-serif;
+  --content-width:1090px;
+}
+body{font-family:var(--font);background:var(--bg);color:var(--ns);min-height:100vh;font-size:14px}
+
+/* TOPBAR */
+.topbar{background:var(--primary);height:72px;display:flex;align-items:center;padding:8px 56px;gap:22px;position:sticky;top:0;z-index:10}
+.topbar-left{display:flex;gap:32px;align-items:center;flex:1}
+.topbar-logo{font-size:22px;font-weight:700;color:#fff}
+.topbar-nav{display:flex;gap:16px}
+.topbar-nav-item{font-size:16px;color:#fff;cursor:pointer;padding:4px 0;opacity:.7;transition:opacity .15s}
+.topbar-nav-item:hover{opacity:1}
+.topbar-nav-item.active{opacity:1;font-weight:500;border-bottom:2px solid rgba(255,255,255,.5)}
+.topbar-right{display:flex;gap:16px;align-items:center}
+.topbar-user{display:flex;gap:8px;align-items:center;padding:8px;cursor:pointer;color:#fff;font-size:15px}
+.topbar-user svg{width:14px;height:8px;fill:#fff}
+
+/* PAGE */
+.page{padding:0 40px 60px}
+.page-inner{max-width:var(--content-width);margin:0 auto}
+.breadcrumb{display:flex;align-items:center;gap:4px;padding:12px 0;font-size:15px}
+.bc-link{color:var(--primary-base);font-weight:600;cursor:pointer}
+.bc-link:hover{text-decoration:underline}
+.bc-sep{color:var(--nb)}
+.bc-cur{color:var(--nb)}
+.page-title{font-size:26px;color:var(--ns);margin-bottom:16px;line-height:36px}
+.page-heading{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.search-bar{display:flex;background:#fff;border:1px solid var(--nsoft);border-radius:8px;overflow:hidden;width:381px}
+.search-bar svg{width:24px;height:24px;flex-shrink:0;margin:12px 0 12px 16px}
+.search-bar input{border:none;outline:none;background:transparent;padding:12px 16px;font-size:16px;font-family:var(--font);color:var(--ns);flex:1}
+.search-bar input::placeholder{color:var(--nb);font-style:italic}
+
+/* TABS */
+.tabs-wrap{border-bottom:1px solid var(--nsoft);display:flex;gap:0;padding:0 16px;margin-bottom:16px}
+.tab{padding:8px 16px 6px;font-size:15px;cursor:pointer;color:#50557c;border-bottom:2px solid transparent;margin-bottom:-1px;display:flex;align-items:center;gap:8px;transition:color .15s;background:none;border-top:none;border-left:none;border-right:none;font-family:var(--font)}
+.tab.active{color:var(--primary);border-bottom-color:var(--primary)}
+.tab .cnt{border-radius:4px;padding:2px 8px;font-size:12px;font-weight:600}
+.tab.active .cnt{background:var(--primary-soft);color:var(--primary-base)}
+.tab:not(.active) .cnt{background:var(--bg);color:var(--nm)}
+
+/* TABLE */
+.table-wrap{background:#fff;border:1px solid var(--nsoft);border-radius:12px;overflow:hidden}
+.table{width:100%;border-collapse:collapse}
+.table th{background:#fff;border-bottom:1px solid var(--nsoft);padding:8px 16px;text-align:left;font-size:14px;font-weight:400;color:var(--nm);height:40px;white-space:nowrap}
+.table td{border-bottom:1px solid var(--nsoft);padding:8px 16px;height:56px;vertical-align:middle}
+.table tr:last-child td{border-bottom:none}
+.table tr:hover td{background:var(--bg);cursor:pointer}
+.cell-date{font-size:15px;color:#50557c;white-space:pre-line;line-height:20px}
+.cell-lojista{font-size:15px;color:var(--ns)}
+.cell-lojista-cnpj{font-size:13px;color:#696d8c;margin-top:2px}
+.cell-nf{font-size:15px;color:var(--ns);display:flex;align-items:center;gap:6px}
+.cell-nf-copy{width:24px;height:24px;display:flex;align-items:center;justify-content:center;cursor:pointer;opacity:.4}
+.cell-nf-copy:hover{opacity:1}
+.cell-nf-copy svg{width:16px;height:16px;stroke:var(--ns);fill:none}
+.sla-badge{display:inline-flex;align-items:center;padding:3px 8px;border-radius:4px;font-size:12px;font-weight:600;white-space:nowrap;margin-top:4px}
+.sla-blue{background:var(--blue-soft);color:var(--primary-strong)}
+.sla-yellow{background:var(--warn-bg);color:var(--primary-strong)}
+.sla-red{background:var(--err-bg);color:var(--primary-strong)}
+.bdg-novo{background:var(--ok-soft);color:var(--ok-str);border-radius:4px;padding:4px 8px;font-size:12px;font-weight:600}
+.bdg-r2{background:var(--warn-bg);color:var(--warn-str);border-radius:4px;padding:4px 8px;font-size:12px;font-weight:600}
+.bdg-r3{background:var(--err-bg);color:#7f1d1d;border-radius:4px;padding:4px 8px;font-size:12px;font-weight:600}
+.bdg-suc{background:var(--ok-soft);color:var(--ok-str);border-radius:4px;padding:4px 8px;font-size:12px;font-weight:600}
+.bdg-par{background:var(--warn-bg);color:var(--warn-str);border-radius:4px;padding:4px 8px;font-size:12px;font-weight:600}
+.bdg-neg{background:var(--err-bg);color:#7f1d1d;border-radius:4px;padding:4px 8px;font-size:12px;font-weight:600}
+.btn-analisar{background:#fff;border:1px solid #d1d1e3;border-radius:8px;padding:7px 16px;font-size:14px;font-weight:600;color:var(--ns);cursor:pointer;white-space:nowrap;font-family:var(--font)}
+.btn-analisar:hover{border-color:var(--ns)}
+.empty-table{text-align:center;padding:48px;color:var(--nb);font-size:16px}
+
+/* DETAIL */
+.detail-view{display:none}
+.detail-view.active{display:block}
+.list-view.hidden{display:none}
+.detail-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:20px}
+.btn-back{background:#fff;border:1px solid var(--nsoft);border-radius:8px;padding:10px 16px;font-size:14px;cursor:pointer;display:flex;align-items:center;gap:8px;font-family:var(--font);color:var(--ns)}
+.btn-back svg{width:16px;height:16px;flex-shrink:0}
+.btn-back:hover{border-color:var(--ns)}
+
+/* CARDS */
+.card{background:#fff;border:1px solid var(--nsoft);border-radius:12px;padding:24px;margin-bottom:16px}
+.card-title{font-size:15px;font-weight:600;color:var(--ns);margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--nsoft)}
+.field-grid{display:grid;gap:16px}
+.field-grid-2{grid-template-columns:1fr 1fr}
+.field-grid-3{grid-template-columns:1fr 1fr 1fr}
+.field-grid-4{grid-template-columns:1fr 1fr 1fr 1fr}
+.field-lbl{font-size:12px;color:var(--nb);margin-bottom:3px;text-transform:uppercase;letter-spacing:.04em;font-weight:600}
+.field-val{font-size:15px;color:var(--ns);font-weight:500;line-height:22px}
+.field-val.mono{font-family:monospace;font-size:14px;background:var(--bg);border:1px solid var(--nsoft);border-radius:4px;padding:2px 8px;display:inline-block}
+.info-box{background:var(--bg);border-radius:8px;padding:14px;font-size:14px;color:var(--nm);line-height:1.6;font-style:italic}
+.coverage-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--nsoft);font-size:14px}
+.coverage-row:last-child{border-bottom:none;font-weight:600;font-size:15px}
+
+/* RESULT CARD */
+.result-card{border-radius:12px;padding:20px 24px;margin-bottom:16px;border-left:5px solid}
+.result-card.suc{background:var(--ok-bg);border-color:var(--ok)}
+.result-card.par{background:var(--warn-bg);border-color:#f59e0b}
+.result-card.neg{background:var(--err-bg);border-color:var(--err)}
+.result-card-title{font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px}
+.result-card.suc .result-card-title{color:var(--ok)}
+.result-card.par .result-card-title{color:#92400e}
+.result-card.neg .result-card-title{color:#7f1d1d}
+.result-card-badge{display:inline-flex;align-items:center;gap:6px;border-radius:9999px;padding:5px 14px;font-size:13px;font-weight:700;margin-bottom:12px}
+.result-card.suc .result-card-badge{background:var(--ok-soft);color:var(--ok-str)}
+.result-card.par .result-card-badge{background:var(--warn-bg);color:var(--warn-str)}
+.result-card.neg .result-card-badge{background:var(--err-bg);color:#7f1d1d}
+.result-card .rg{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:4px}
+.result-card .rl{font-size:12px;color:var(--nb)}
+.result-card .rv{font-size:16px;font-weight:600;color:var(--ns)}
+
+/* DETAIL ACTIONS */
+.detail-actions{display:flex;gap:12px;justify-content:flex-end;margin-top:24px;padding-top:20px;border-top:1px solid var(--nsoft)}
+.btn-approve{background:var(--primary);color:#fff;border:none;border-radius:8px;padding:10px 20px;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--font)}
+.btn-approve:hover{background:#0a22b0}
+.btn-partial{background:#fff;color:#f59e0b;border:1px solid #f59e0b;border-radius:8px;padding:10px 20px;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--font)}
+.btn-deny{background:#fff;color:var(--err);border:1px solid var(--err);border-radius:8px;padding:10px 20px;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--font)}
+
+/* DRAWER */
+.overlay{position:fixed;inset:0;background:rgba(49,47,79,.4);z-index:100;display:none}
+.overlay.open{display:block}
+.drawer{position:fixed;top:0;right:0;width:480px;height:100vh;background:#fff;box-shadow:-4px 0 40px rgba(0,0,0,.14);z-index:101;display:flex;flex-direction:column;overflow-y:auto;transform:translateX(100%);transition:transform .3s cubic-bezier(.4,0,.2,1)}
+.drawer.open{transform:translateX(0)}
+.drawer-hdr{padding:20px 24px;border-bottom:1px solid var(--nsoft);display:flex;justify-content:space-between;align-items:center}
+.drawer-title{font-size:18px;font-weight:600;color:var(--ns)}
+.drawer-x{width:32px;height:32px;display:flex;align-items:center;justify-content:center;cursor:pointer;border-radius:6px;background:none;border:none}
+.drawer-x:hover{background:var(--bg)}
+.drawer-x svg{width:20px;height:20px}
+.drawer-body{padding:24px;flex:1;display:flex;flex-direction:column;gap:20px}
+.drawer-ft{padding:16px 24px;border-top:1px solid var(--nsoft);display:flex;justify-content:flex-end;gap:12px}
+.form-group{display:flex;flex-direction:column;gap:8px}
+.form-label{font-size:15px;color:var(--ns);font-weight:500}
+.form-input{background:#fff;border:1px solid var(--nsoft);border-radius:8px;padding:12px 16px;font-size:15px;font-family:var(--font);color:var(--ns);outline:none;transition:border-color .15s}
+.form-input:focus{border-color:var(--primary)}
+.form-hint{font-size:13px;color:var(--nb)}
+.amount-box{background:var(--primary-soft);border-radius:8px;padding:16px;text-align:center}
+.amount-box .al{font-size:13px;color:var(--nm)}
+.amount-box .av{font-size:28px;font-weight:700;color:var(--primary);margin-top:4px}
+.btn-primary{background:var(--primary);color:#fff;border:none;border-radius:8px;padding:10px 20px;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--font)}
+.btn-secondary{background:#fff;color:var(--ns);border:1px solid #d1d1e3;border-radius:8px;padding:10px 16px;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--font)}
+.btn-danger{background:var(--err);color:#fff;border:none;border-radius:8px;padding:10px 20px;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--font)}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-left">
+    <div class="topbar-logo">olist</div>
+    <nav class="topbar-nav">
+      <span class="topbar-nav-item">lojistas</span>
+      <span class="topbar-nav-item">etiquetas</span>
+      <span class="topbar-nav-item">cotacoes</span>
+      <span class="topbar-nav-item">solicitacoes de saque</span>
+      <span class="topbar-nav-item active">divergencias &amp; indenizacoes</span>
+    </nav>
+  </div>
+  <div class="topbar-right">
+    <div class="topbar-user">nome.olister <svg viewBox="0 0 14 8"><path d="M1 1l6 6 6-6" stroke="white" stroke-width="1.5" fill="none"/></svg></div>
+  </div>
+</header>
+
+<main class="page"><div class="page-inner">
+
+  <!-- LIST VIEW -->
+  <div id="list-view">
+    <div class="breadcrumb">
+      <span class="bc-link">Inicio</span>
+      <span class="bc-sep"> &gt; </span>
+      <span class="bc-link">Divergencias</span>
+      <span class="bc-sep"> &gt; </span>
+      <span class="bc-cur">Reembolso</span>
+    </div>
+    <div class="page-heading">
+      <div class="page-title" style="margin-bottom:0">Reembolso</div>
+      <div class="search-bar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#8f8d85" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+        <input type="text" placeholder="cod. de rastreio ou seller">
+      </div>
+    </div>
+    <div class="tabs-wrap">
+      <button class="tab active" id="tab-btn-novas" onclick="switchTab('novas')">Novas Solicitacoes <span class="cnt" id="cnt-novas">0</span></button>
+      <button class="tab" id="tab-btn-finalizadas" onclick="switchTab('finalizadas')">Finalizadas <span class="cnt" id="cnt-final">0</span></button>
+    </div>
+
+    <div id="tab-novas">
+      <div class="table-wrap">
+        <table class="table">
+          <thead><tr><th>Data abertura</th><th>Lojista</th><th>Nota fiscal</th><th>Reincidencia</th><th></th></tr></thead>
+          <tbody id="tbody-novas"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div id="tab-finalizadas" style="display:none">
+      <div class="table-wrap">
+        <table class="table">
+          <thead><tr><th>Data abertura</th><th>Lojista</th><th>Nota fiscal</th><th>Decisao</th><th>Valor reembolsado</th><th>Decisor</th><th></th></tr></thead>
+          <tbody id="tbody-final"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- DETAIL VIEW -->
+  <div class="detail-view" id="detail-view">
+    <div class="breadcrumb">
+      <span class="bc-link" onclick="backToList()">Inicio</span>
+      <span class="bc-sep"> &gt; </span>
+      <span class="bc-link" onclick="backToList()">Reembolso</span>
+      <span class="bc-sep"> &gt; </span>
+      <span class="bc-cur" id="detail-bc">Analisar</span>
+    </div>
+
+    <!-- DETAIL NOVAS -->
+    <div id="d-novas" style="display:none">
+      <div class="detail-header">
+        <div>
+          <div class="page-title" id="d-novas-title" style="margin-bottom:4px">Analisar solicitacao</div>
+          <div style="font-size:14px;color:var(--nm)" id="d-novas-sub"></div>
+        </div>
+        <button class="btn-back" onclick="backToList()"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10 3L5 8l5 5"/></svg>Voltar</button>
+      </div>
+
+      <!-- CARD PEDIDO -->
+      <div class="card">
+        <div class="card-title">Pedido</div>
+        <div class="field-grid field-grid-4">
+          <div><div class="field-lbl">Nota Fiscal</div><div class="field-val" id="dn-nf">—</div></div>
+          <div><div class="field-lbl">Valor NF</div><div class="field-val" id="dn-valor">—</div></div>
+          <div><div class="field-lbl">Destinatario</div><div class="field-val" id="dn-dest">—</div></div>
+          <div><div class="field-lbl">Data abertura</div><div class="field-val" id="dn-data">—</div></div>
+          <div><div class="field-lbl">Reincidencia</div><div class="field-val" id="dn-reinc">—</div></div>
+          <div><div class="field-lbl">SLA</div><div class="field-val" id="dn-sla">—</div></div>
+          <div><div class="field-lbl">Chamado</div><div class="field-val" id="dn-chamado">—</div></div>
+          <div><div class="field-lbl">Protocolo</div><div class="field-val" id="dn-proto">—</div></div>
+        </div>
+      </div>
+
+      <!-- CARD ENVIO -->
+      <div class="card">
+        <div class="card-title">Envio</div>
+        <div class="field-grid field-grid-4">
+          <div><div class="field-lbl">Transportadora</div><div class="field-val">Correios</div></div>
+          <div><div class="field-lbl">Etiqueta</div><div class="field-val"><span class="field-val mono">AK147145677BR</span></div></div>
+          <div><div class="field-lbl">Status</div><div class="field-val">Enviado</div></div>
+          <div><div class="field-lbl">Previsao entrega</div><div class="field-val">12/04/2026</div></div>
+          <div><div class="field-lbl">CEP destino</div><div class="field-val">87005-020</div></div>
+          <div><div class="field-lbl">Cidade</div><div class="field-val">Maringa / PR</div></div>
+          <div><div class="field-lbl">Postado em</div><div class="field-val">20/02/2026</div></div>
+          <div><div class="field-lbl">Modalidade</div><div class="field-val">PAC</div></div>
+        </div>
+      </div>
+
+      <!-- CARD INFORMACOES -->
+      <div class="card">
+        <div class="card-title">Informacoes da solicitacao</div>
+        <div style="margin-bottom:16px">
+          <div class="field-lbl" style="margin-bottom:6px">Descricao do ocorrido</div>
+          <div class="info-box" id="dn-descricao">Sem descricao informada.</div>
+        </div>
+        <div class="field-grid field-grid-3" style="margin-bottom:20px">
+          <div><div class="field-lbl">Cobertura contratada</div><div class="field-val">1,5% da NF</div></div>
+          <div><div class="field-lbl">Taxa cobrada</div><div class="field-val" id="dn-taxa">—</div></div>
+          <div><div class="field-lbl">Max reembolsavel</div><div class="field-val" id="dn-maxreemb">—</div></div>
+        </div>
+        <div style="border-top:1px solid var(--nsoft);padding-top:16px">
+          <div class="field-lbl" style="margin-bottom:8px">Resumo financeiro</div>
+          <div class="coverage-row"><span>Valor da nota fiscal</span><span id="dn-cov-nf">—</span></div>
+          <div class="coverage-row"><span>Taxa do seguro (1,5%)</span><span id="dn-cov-taxa">—</span></div>
+          <div class="coverage-row"><span>Cobertura maxima (100%)</span><span id="dn-cov-max">—</span></div>
+        </div>
+      </div>
+
+      <div class="detail-actions">
+        <button class="btn-deny" onclick="openDrawer('deny')">Negar reembolso</button>
+        <button class="btn-partial" onclick="openDrawer('partial')">Aprovar parcialmente</button>
+        <button class="btn-approve" onclick="openDrawer('approve')">Aprovar reembolso</button>
+      </div>
+    </div>
+
+    <!-- DETAIL FINALIZADAS -->
+    <div id="d-final" style="display:none">
+      <div class="detail-header">
+        <div>
+          <div class="page-title" id="d-final-title" style="margin-bottom:4px">Detalhes do reembolso</div>
+          <div style="font-size:14px;color:var(--nm)" id="d-final-sub"></div>
+        </div>
+        <button class="btn-back" onclick="backToList()"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10 3L5 8l5 5"/></svg>Voltar</button>
+      </div>
+
+      <!-- CARD RESULTADO -->
+      <div id="result-card-wrap"></div>
+
+      <!-- CARD PEDIDO -->
+      <div class="card">
+        <div class="card-title">Pedido</div>
+        <div class="field-grid field-grid-4">
+          <div><div class="field-lbl">Nota Fiscal</div><div class="field-val" id="df-nf">—</div></div>
+          <div><div class="field-lbl">Valor NF</div><div class="field-val" id="df-valor">—</div></div>
+          <div><div class="field-lbl">Destinatario</div><div class="field-val" id="df-dest">—</div></div>
+          <div><div class="field-lbl">Data abertura</div><div class="field-val" id="df-data">—</div></div>
+          <div><div class="field-lbl">Chamado</div><div class="field-val" id="df-chamado">—</div></div>
+          <div><div class="field-lbl">Protocolo</div><div class="field-val" id="df-proto">—</div></div>
+          <div><div class="field-lbl">Decisor</div><div class="field-val">nome.olister</div></div>
+          <div><div class="field-lbl">Data decisao</div><div class="field-val" id="df-datadec">—</div></div>
+        </div>
+      </div>
+
+      <!-- CARD ENVIO -->
+      <div class="card">
+        <div class="card-title">Envio</div>
+        <div class="field-grid field-grid-4">
+          <div><div class="field-lbl">Transportadora</div><div class="field-val">Correios</div></div>
+          <div><div class="field-lbl">Etiqueta</div><div class="field-val"><span class="field-val mono">AK147145677BR</span></div></div>
+          <div><div class="field-lbl">Cidade destino</div><div class="field-val" id="df-cidade">—</div></div>
+          <div><div class="field-lbl">Modalidade</div><div class="field-val">PAC</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div></main>
+
+<!-- DRAWER: APROVAR -->
+<div class="overlay" id="ov-approve" onclick="closeDrawer('approve')"></div>
+<div class="drawer" id="drawer-approve">
+  <div class="drawer-hdr"><div class="drawer-title">Aprovar reembolso</div><button class="drawer-x" onclick="closeDrawer('approve')"><svg viewBox="0 0 24 24" fill="none" stroke="#5e5d5a" stroke-width="1.5"><path d="M18 6L6 18M6 6l12 12"/></svg></button></div>
+  <div class="drawer-body">
+    <div>
+      <div class="coverage-row"><span>Valor da nota fiscal</span><span id="dapp-nf">—</span></div>
+      <div class="coverage-row"><span>Taxa ja cobrada (1,5%)</span><span id="dapp-taxa">—</span></div>
+      <div class="coverage-row"><span>Valor a reembolsar</span><span style="color:var(--ok);font-weight:700" id="dapp-reemb">—</span></div>
+    </div>
+    <div class="amount-box"><div class="al">Valor total do reembolso</div><div class="av" id="dapp-total">—</div></div>
+    <div class="form-group">
+      <label class="form-label">Justificativa (opcional)</label>
+      <textarea class="form-input" id="approve-note" style="min-height:80px;resize:vertical" placeholder="Observacoes sobre a aprovacao..."></textarea>
+    </div>
+    <div style="background:var(--primary-soft);border-radius:8px;padding:14px;font-size:13px;color:var(--primary-strong)">O valor sera creditado na Carteira Envios do lojista em ate 1 dia util apos confirmacao.</div>
+  </div>
+  <div class="drawer-ft"><button class="btn-secondary" onclick="closeDrawer('approve')">cancelar</button><button class="btn-primary" onclick="confirmDecision('reembolsado')">Confirmar aprovacao</button></div>
+</div>
+
+<!-- DRAWER: PARCIAL -->
+<div class="overlay" id="ov-partial" onclick="closeDrawer('partial')"></div>
+<div class="drawer" id="drawer-partial">
+  <div class="drawer-hdr"><div class="drawer-title">Aprovar parcialmente</div><button class="drawer-x" onclick="closeDrawer('partial')"><svg viewBox="0 0 24 24" fill="none" stroke="#5e5d5a" stroke-width="1.5"><path d="M18 6L6 18M6 6l12 12"/></svg></button></div>
+  <div class="drawer-body">
+    <div class="form-group">
+      <label class="form-label">Valor a reembolsar</label>
+      <input class="form-input" type="text" id="partial-value" placeholder="Ex: R$ 113,12">
+      <div class="form-hint" id="partial-max-hint">Maximo disponivel: —</div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Justificativa da aprovacao parcial</label>
+      <textarea class="form-input" id="partial-reason" style="min-height:100px;resize:vertical" placeholder="Descreva o motivo..."></textarea>
+    </div>
+    <div style="background:var(--warn-bg);border-radius:8px;padding:14px;font-size:13px;color:var(--warn-str)">O lojista sera notificado sobre a aprovacao parcial e o motivo informado.</div>
+  </div>
+  <div class="drawer-ft"><button class="btn-secondary" onclick="closeDrawer('partial')">cancelar</button><button class="btn-primary" style="background:#f59e0b" onclick="confirmDecision('parcial')">Confirmar aprovacao parcial</button></div>
+</div>
+
+<!-- DRAWER: NEGAR -->
+<div class="overlay" id="ov-deny" onclick="closeDrawer('deny')"></div>
+<div class="drawer" id="drawer-deny">
+  <div class="drawer-hdr"><div class="drawer-title">Negar reembolso</div><button class="drawer-x" onclick="closeDrawer('deny')"><svg viewBox="0 0 24 24" fill="none" stroke="#5e5d5a" stroke-width="1.5"><path d="M18 6L6 18M6 6l12 12"/></svg></button></div>
+  <div class="drawer-body">
+    <div style="background:var(--err-bg);border-radius:8px;padding:14px;font-size:14px;color:#7f1d1d">Ao negar, o lojista sera notificado e podera reabrir a solicitacao com novas informacoes.</div>
+    <div class="form-group">
+      <label class="form-label">Motivo da negativa</label>
+      <textarea class="form-input" id="deny-reason" style="min-height:120px;resize:vertical" placeholder="Descreva claramente o motivo da negativa para que o lojista possa entender a decisao..."></textarea>
+      <div class="form-hint">Este texto sera exibido ao lojista na plataforma.</div>
+    </div>
+  </div>
+  <div class="drawer-ft"><button class="btn-secondary" onclick="closeDrawer('deny')">cancelar</button><button class="btn-danger" onclick="confirmDecision('negado')">Confirmar negativa</button></div>
+</div>
+
+<script>
+// ===== HELPERS =====
+const LS = 'rg_solicitations';
+const getS = () => { try { return JSON.parse(localStorage.getItem(LS)||'[]') } catch(e){ return [] } };
+const saveS = l => localStorage.setItem(LS, JSON.stringify(l));
+
+function norm(s) {
+  // Normaliza campos duplicados: garante destinatario, chamado, val, timestamp
+  return {
+    ...s,
+    destinatario: s.destinatario || s.dest || '',
+    chamado: s.chamado || s.ch || '',
+    valor: s.valor || s.val || 'R$ 0,00',
+    timestamp: s.timestamp || s.ts || Date.now(),
+    valorReembolsado: s.valorReembolsado || s.vr || (s.status === 'reembolsado' ? (s.valor || s.val || '—') : s.status === 'negado' ? 'R$ 0,00' : (s.vr || '—')),
+    decisaoNota: s.decisaoNota || s.nota || ''
+  };
+}
+
+function seedAdmin() {
+  const cur = getS();
+  // Apenas normaliza campos duplicados, não recria se já existir
+  if (cur.length > 0) {
+    // normaliza e re-salva se necessário
+    const normalized = cur.map(norm);
+    const needsSave = JSON.stringify(normalized) !== JSON.stringify(cur);
+    if (needsSave) saveS(normalized);
+    return;
+  }
+  // Seed inicial unificado
+  const d = 86400000, n = Date.now();
+  const fmt = ts => new Date(ts).toLocaleDateString('pt-BR');
+  saveS([
+    { id:'REE-00000001', nf:'82630312', destinatario:'Gustavo Moreira Farias Silva', chamado:'CHM-2024-00847', status:'em_analise', valor:'R$ 226,24', timestamp:n-1*d, data:fmt(n-1*d) },
+    { id:'REE-00000002', nf:'55566677788', destinatario:'Carlos Eduardo Lima', chamado:'CHM-2024-01234', status:'em_analise', valor:'R$ 350,00', timestamp:n-2*d, data:fmt(n-2*d) },
+    { id:'REE-00000010', nf:'11122233344', destinatario:'Maria Santos Oliveira', chamado:'CHM-2024-00500', status:'reembolsado', valor:'R$ 180,00', valorReembolsado:'R$ 180,00', decisaoNota:'Solicitacao aprovada integralmente. Valor creditado na Carteira Envios.', timestamp:n-5*d, data:fmt(n-5*d) },
+    { id:'REE-00000011', nf:'99988877766', destinatario:'Ana Paula Costa', chamado:'CHM-2024-00600', status:'parcial', valor:'R$ 420,00', valorReembolsado:'R$ 210,00', decisaoNota:'Aprovacao parcial: 50% coberto conforme apolice vigente. Produto com avaria parcial documentada.', timestamp:n-6*d, data:fmt(n-6*d) },
+    { id:'REE-00000012', nf:'33344455566', destinatario:'Roberto Silva Nunes', chamado:'CHM-2024-00700', status:'negado', valor:'R$ 290,00', valorReembolsado:'R$ 0,00', decisaoNota:'Pedido entregue conforme rastreio. O prazo minimo de sinistro nao foi atingido.', timestamp:n-7*d, data:fmt(n-7*d) },
+  ]);
+}
+
+function getSLADays(ts) { return Math.max(0, Math.floor((Date.now() - ts) / 86400000)); }
+function slaHtml(days) {
+  const cls = days <= 2 ? 'sla-blue' : days <= 3 ? 'sla-yellow' : 'sla-red';
+  return `<span class="sla-badge ${cls}">ha ${days||1} dia${days!==1?'s':''}</span>`;
+}
+function reinc(list, nf) {
+  const cnt = list.filter(s => s.nf === nf).length;
+  if (cnt >= 3) return '<span class="bdg-r3">3a reabertura</span>';
+  if (cnt === 2) return '<span class="bdg-r2">2a reabertura</span>';
+  return '<span class="bdg-novo">novo</span>';
+}
+function parseBRL(s) { return parseFloat((s||'0').replace('R$ ','').replace('.','').replace(',','.')) || 0; }
+function fmtBRL(v) { return 'R$ ' + v.toFixed(2).replace('.',','); }
+
+// ===== STATE =====
+let curItem = null;
+
+// ===== TABS =====
+function switchTab(name) {
+  document.getElementById('tab-btn-novas').classList.toggle('active', name==='novas');
+  document.getElementById('tab-btn-finalizadas').classList.toggle('active', name==='finalizadas');
+  document.getElementById('tab-novas').style.display = name==='novas' ? 'block' : 'none';
+  document.getElementById('tab-finalizadas').style.display = name==='finalizadas' ? 'block' : 'none';
+}
+
+// ===== RENDER =====
+function renderNovas() {
+  const all = getS().map(norm);
+  const list = all.filter(s => s.status === 'em_analise');
+  document.getElementById('cnt-novas').textContent = list.length;
+  const tbody = document.getElementById('tbody-novas');
+  if (!list.length) { tbody.innerHTML = `<tr><td colspan="5" class="empty-table">Nenhuma solicitacao nova</td></tr>`; return; }
+  tbody.innerHTML = list.map((s, i) => {
+    const days = getSLADays(s.timestamp);
+    const dt = new Date(s.timestamp);
+    const hora = dt.getHours().toString().padStart(2,'0') + 'h' + dt.getMinutes().toString().padStart(2,'0');
+    return `<tr onclick="openNovas(${i})">
+      <td><div class="cell-date">${s.data}\n${hora}</div>${slaHtml(days)}</td>
+      <td><div class="cell-lojista">${s.destinatario}</div><div class="cell-lojista-cnpj">14.789.234/0001-55</div></td>
+      <td><div class="cell-nf">NF-e ${s.nf}<span class="cell-nf-copy" onclick="cpNF('${s.nf}',event)" title="Copiar"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="4" width="9" height="10" rx="1"/><path d="M3 3V2a1 1 0 011-1h8a1 1 0 011 1v10a1 1 0 01-1 1H12"/></svg></span></div></td>
+      <td>${reinc(list, s.nf)}</td>
+      <td><button class="btn-analisar" onclick="openNovas(${i});event.stopPropagation()">analisar</button></td>
+    </tr>`;
+  }).join('');
+}
+function renderFinal() {
+  const all = getS().map(norm);
+  const list = all.filter(s => s.status !== 'em_analise');
+  document.getElementById('cnt-final').textContent = list.length;
+  const tbody = document.getElementById('tbody-final');
+  if (!list.length) { tbody.innerHTML = `<tr><td colspan="7" class="empty-table">Nenhuma solicitacao finalizada</td></tr>`; return; }
+  const lbl = { reembolsado:'<span class="bdg-suc">Reembolsado</span>', parcial:'<span class="bdg-par">Parcialmente Reembolsado</span>', negado:'<span class="bdg-neg">Negado</span>' };
+  tbody.innerHTML = list.map((s, i) => `<tr onclick="openFinal(${i})">
+    <td><div class="cell-date">${s.data}</div></td>
+    <td><div class="cell-lojista">${s.destinatario}</div><div class="cell-lojista-cnpj">14.789.234/0001-55</div></td>
+    <td><div class="cell-nf">NF-e ${s.nf}</div></td>
+    <td>${lbl[s.status]||s.status}</td>
+    <td>${s.valorReembolsado||'—'}</td>
+    <td>nome.olister</td>
+    <td><button class="btn-analisar" onclick="openFinal(${i});event.stopPropagation()">detalhes</button></td>
+  </tr>`).join('');
+}
+function cpNF(nf, e) { e.stopPropagation(); navigator.clipboard.writeText(nf).catch(()=>{}); }
+
+// ===== DETAIL NOVAS =====
+function openNovas(idx) {
+  const list = getS().map(norm).filter(s => s.status === 'em_analise');
+  const s = list[idx]; if (!s) return;
+  curItem = s;
+  const v = parseBRL(s.valor);
+  const taxa = fmtBRL(v * 0.015);
+  const max = fmtBRL(v);
+  document.getElementById('dn-nf').textContent = s.nf;
+  document.getElementById('dn-valor').textContent = s.valor;
+  document.getElementById('dn-dest').textContent = s.destinatario;
+  document.getElementById('dn-data').textContent = s.data;
+  document.getElementById('dn-chamado').textContent = s.chamado;
+  document.getElementById('dn-proto').textContent = s.id;
+  document.getElementById('dn-reinc').innerHTML = reinc(list, s.nf);
+  document.getElementById('dn-sla').innerHTML = slaHtml(getSLADays(s.timestamp));
+  document.getElementById('dn-descricao').textContent = s.descricao || 'Sem descricao informada.';
+  document.getElementById('dn-taxa').textContent = taxa;
+  document.getElementById('dn-maxreemb').textContent = max;
+  document.getElementById('dn-cov-nf').textContent = s.valor;
+  document.getElementById('dn-cov-taxa').textContent = taxa;
+  document.getElementById('dn-cov-max').textContent = max;
+  // preencher drawer approve
+  document.getElementById('dapp-nf').textContent = s.valor;
+  document.getElementById('dapp-taxa').textContent = taxa;
+  document.getElementById('dapp-reemb').textContent = max;
+  document.getElementById('dapp-total').textContent = max;
+  document.getElementById('partial-max-hint').textContent = 'Maximo disponivel: ' + max;
+  document.getElementById('d-novas-title').textContent = 'Analisar NF ' + s.nf;
+  document.getElementById('d-novas-sub').textContent = s.destinatario + ' · ' + s.data;
+  document.getElementById('detail-bc').textContent = 'Analisar';
+  showDetail('novas');
+}
+
+// ===== DETAIL FINAL =====
+function openFinal(idx) {
+  const list = getS().map(norm).filter(s => s.status !== 'em_analise');
+  const s = list[idx]; if (!s) return;
+  curItem = s;
+  // result card
+  const types = { reembolsado:'suc', parcial:'par', negado:'neg' };
+  const labels = { reembolsado:'✓ Reembolsado', parcial:'~ Parcialmente Reembolsado', negado:'✕ Nao Reembolsado' };
+  const cls = types[s.status] || 'suc';
+  const wrap = document.getElementById('result-card-wrap');
+  wrap.innerHTML = `<div class="result-card ${cls}">
+    <div class="result-card-title">${labels[s.status] || s.status}</div>
+    <div class="result-card-badge">${labels[s.status]||s.status}</div>
+    <div class="rg">
+      <div><div class="rl">Valor reembolsado</div><div class="rv">${s.valorReembolsado||'—'}</div></div>
+      <div><div class="rl">Data da decisao</div><div class="rv">${s.data}</div></div>
+      ${s.decisaoNota ? `<div style="grid-column:1/-1"><div class="rl">Parecer</div><div style="font-size:14px;color:var(--ns);line-height:1.5;margin-top:2px">${s.decisaoNota}</div></div>` : ''}
+    </div>
+  </div>`;
+  document.getElementById('df-nf').textContent = s.nf;
+  document.getElementById('df-valor').textContent = s.valor;
+  document.getElementById('df-dest').textContent = s.destinatario;
+  document.getElementById('df-data').textContent = s.data;
+  document.getElementById('df-chamado').textContent = s.chamado;
+  document.getElementById('df-proto').textContent = s.id;
+  document.getElementById('df-datadec').textContent = s.data;
+  document.getElementById('df-cidade').textContent = 'Maringa / PR';
+  document.getElementById('d-final-title').textContent = 'Detalhes — NF ' + s.nf;
+  document.getElementById('d-final-sub').textContent = s.destinatario + ' · ' + s.data;
+  document.getElementById('detail-bc').textContent = 'Detalhes';
+  showDetail('final');
+}
+
+function showDetail(mode) {
+  document.getElementById('list-view').classList.add('hidden');
+  document.getElementById('detail-view').classList.add('active');
+  document.getElementById('d-novas').style.display = mode === 'novas' ? 'block' : 'none';
+  document.getElementById('d-final').style.display = mode === 'final' ? 'block' : 'none';
+}
+function backToList() {
+  document.getElementById('list-view').classList.remove('hidden');
+  document.getElementById('detail-view').classList.remove('active');
+  renderAll();
+}
+
+// ===== DECISION =====
+function confirmDecision(status) {
+  const all = getS().map(norm);
+  const idx = all.findIndex(s => s.id === curItem.id);
+  if (idx === -1) return;
+  let vr = curItem.valor;
+  let nota = '';
+  if (status === 'reembolsado') {
+    nota = document.getElementById('approve-note')?.value || 'Solicitacao aprovada integralmente. O valor sera creditado na Carteira Envios.';
+  } else if (status === 'parcial') {
+    vr = document.getElementById('partial-value')?.value || '';
+    nota = document.getElementById('partial-reason')?.value || 'Aprovacao parcial conforme analise tecnica.';
+  } else {
+    vr = 'R$ 0,00';
+    nota = document.getElementById('deny-reason')?.value || 'Solicitacao nao atende aos criterios de elegibilidade.';
+  }
+  all[idx].status = status;
+  all[idx].valorReembolsado = vr;
+  all[idx].decisaoNota = nota;
+  all[idx].data = new Date().toLocaleDateString('pt-BR');
+  saveS(all);
+  ['approve','partial','deny'].forEach(closeDrawer);
+  backToList();
+  switchTab('finalizadas');
+}
+
+// ===== DRAWERS =====
+function openDrawer(id) {
+  document.getElementById('ov-'+id).classList.add('open');
+  document.getElementById('drawer-'+id).classList.add('open');
+}
+function closeDrawer(id) {
+  document.getElementById('ov-'+id).classList.remove('open');
+  document.getElementById('drawer-'+id).classList.remove('open');
+}
+
+// ===== INIT =====
+function renderAll() { seedAdmin(); renderNovas(); renderFinal(); }
+renderAll();
+setInterval(renderAll, 3000);
+</script>
+</body>
+</html>

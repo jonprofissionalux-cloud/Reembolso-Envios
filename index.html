@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reembolso Garantido — Dev Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#fcfbf8;--primary:#0c29d0;--primary-base:#043fbe;
+  --primary-soft:#e7edf8;--ns:#312f4f;--nm:#5e5d5a;--nb:#8f8d85;
+  --nsoft:#e8e5d9;--ok:#16a34a;--ok-bg:#f0fdf4;
+  --font:'Plus Jakarta Sans',sans-serif;
+}
+body{font-family:var(--font);background:var(--bg);color:var(--ns);min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:48px 24px;gap:40px}
+
+/* header */
+.header{text-align:center;display:flex;flex-direction:column;align-items:center;gap:10px}
+.logo{display:flex;align-items:flex-end;gap:5px}
+.logo-o{font-size:30px;font-weight:700;color:var(--primary);line-height:1}
+.logo-e{font-size:18px;color:var(--primary);margin-bottom:3px}
+.badge{background:var(--primary-soft);color:var(--primary-base);border-radius:20px;padding:4px 14px;font-size:12px;font-weight:600}
+.title{font-size:24px;font-weight:700;color:var(--ns)}
+.sub{font-size:14px;color:var(--nm);max-width:400px;line-height:1.7;text-align:center}
+.sub code{background:var(--primary-soft);color:var(--primary-base);padding:1px 6px;border-radius:4px;font-size:12px}
+
+/* cards */
+.cards{display:flex;gap:20px;flex-wrap:wrap;justify-content:center}
+
+.card{background:#fff;border:1px solid var(--nsoft);border-radius:16px;padding:32px 28px;width:340px;display:flex;flex-direction:column;gap:20px;transition:box-shadow .2s,border-color .2s;cursor:default}
+.card:hover{border-color:#b0c0e8;box-shadow:0 8px 32px rgba(12,41,208,.08)}
+
+.card-icon{width:52px;height:52px;background:var(--primary-soft);border-radius:12px;display:flex;align-items:center;justify-content:center}
+.card-icon svg{width:26px;height:26px}
+
+.card-title{font-size:20px;font-weight:700;color:var(--ns)}
+.card-desc{font-size:13px;color:var(--nm);line-height:1.65;margin-top:-8px}
+
+.tags{display:flex;flex-wrap:wrap;gap:6px}
+.tag{background:var(--bg);border:1px solid var(--nsoft);border-radius:6px;padding:3px 10px;font-size:11px;color:var(--nm);font-weight:500}
+
+/* status */
+.status{display:flex;align-items:center;gap:8px;padding:10px 14px;background:var(--bg);border-radius:8px;font-size:13px;color:var(--nm);border:1px solid var(--nsoft)}
+.dot{width:8px;height:8px;border-radius:50%;background:#d1d5db;flex-shrink:0;transition:background .3s}
+.dot.green{background:var(--ok)}
+.dot.blue{background:var(--primary)}
+.count{background:var(--primary-soft);color:var(--primary-base);border-radius:20px;padding:2px 8px;font-size:11px;font-weight:700;margin-left:auto}
+
+/* buttons */
+.btns{display:flex;flex-direction:column;gap:8px}
+.btn{border-radius:8px;padding:12px 16px;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--font);text-align:center;text-decoration:none;display:block;transition:background .15s,border-color .15s,transform .1s}
+.btn:active{transform:scale(.98)}
+.btn-primary{background:var(--primary);color:#fff;border:none}
+.btn-primary:hover{background:#0a22b0}
+.btn-outline{background:#fff;color:var(--ns);border:1px solid #d1d1e3}
+.btn-outline:hover{border-color:var(--ns)}
+
+/* divider */
+hr{width:100%;max-width:720px;border:none;border-top:1px solid var(--nsoft)}
+
+/* info */
+.info{background:#fff;border:1px solid var(--nsoft);border-radius:12px;padding:20px 24px;max-width:720px;width:100%}
+.info-title{font-size:13px;font-weight:600;color:var(--ns);margin-bottom:12px}
+.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px 24px}
+.info-row{display:flex;flex-direction:column;gap:2px}
+.info-label{font-size:11px;color:var(--nb);font-weight:600;text-transform:uppercase;letter-spacing:.04em}
+.info-code{font-family:monospace;font-size:12px;background:var(--bg);border:1px solid var(--nsoft);border-radius:4px;padding:2px 8px;color:var(--primary-base)}
+
+/* pendências */
+.pending{background:#fff;border:1px solid var(--nsoft);border-radius:12px;padding:20px 24px;max-width:720px;width:100%}
+.pending-title{font-size:13px;font-weight:600;color:var(--ns);margin-bottom:10px}
+.pending-list{display:flex;flex-direction:column;gap:6px}
+.pending-item{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--nm)}
+.pending-item::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--nsoft);border:1px solid #b0bfe8;flex-shrink:0}
+
+.note{font-size:12px;color:var(--nb);text-align:center;max-width:480px;line-height:1.6}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="logo"><span class="logo-o">olist</span><span class="logo-e">envios</span></div>
+  <span class="badge">Feature em desenvolvimento</span>
+  <div class="title">Reembolso Garantido — Dev Hub</div>
+  <div class="sub">Protótipo de alta fidelidade. Dois arquivos HTML se comunicam via <code>localStorage</code>. Abra em abas separadas para simular o fluxo completo.</div>
+</div>
+
+<div class="cards">
+
+  <!-- LOJISTA -->
+  <div class="card">
+    <div class="card-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#0c29d0" stroke-width="1.5">
+        <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/>
+      </svg>
+    </div>
+    <div>
+      <div class="card-title">lojista.html</div>
+      <div class="card-desc">Interface do lojista. LP de ativação, ativação com 3 checkboxes, abrir solicitação, acompanhar em aberto e finalizados.</div>
+    </div>
+    <div class="tags">
+      <span class="tag">LP ativação</span>
+      <span class="tag">3 views</span>
+      <span class="tag">drawer ativação</span>
+      <span class="tag">busca 5 mocks</span>
+      <span class="tag">3 modais finalizados</span>
+    </div>
+    <div class="status">
+      <span class="dot" id="dot-rg"></span>
+      <span id="txt-rg">Verificando...</span>
+      <span class="count" id="cnt-rg" style="display:none"></span>
+    </div>
+    <div class="btns">
+      <a class="btn btn-primary" href="lojista.html" target="_blank">Abrir lojista.html ↗</a>
+      <button class="btn btn-outline" onclick="resetLojista()">Resetar estado (LP)</button>
+    </div>
+  </div>
+
+  <!-- ADMIN -->
+  <div class="card">
+    <div class="card-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#0c29d0" stroke-width="1.5">
+        <path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+      </svg>
+    </div>
+    <div>
+      <div class="card-title">admin.html</div>
+      <div class="card-desc">Backoffice da equipe Olist. Fila de novas solicitações, análise, decisão (aprovar/parcial/negar) e histórico de finalizadas.</div>
+    </div>
+    <div class="tags">
+      <span class="tag">topbar azul</span>
+      <span class="tag">tabela novas</span>
+      <span class="tag">tela analisar</span>
+      <span class="tag">badges SLA</span>
+      <span class="tag">3 drawers decisão</span>
+    </div>
+    <div class="status">
+      <span class="dot" id="dot-adm"></span>
+      <span id="txt-adm">Verificando...</span>
+      <span class="count" id="cnt-adm" style="display:none"></span>
+    </div>
+    <div class="btns">
+      <a class="btn btn-primary" href="admin.html" target="_blank">Abrir admin.html ↗</a>
+      <button class="btn btn-outline" onclick="resetAdmin()">Resetar fila (seed admin)</button>
+    </div>
+  </div>
+
+</div>
+
+<hr>
+
+<div class="info">
+  <div class="info-title">Schema localStorage</div>
+  <div class="info-grid">
+    <div class="info-row">
+      <span class="info-label">Chave principal</span>
+      <span class="info-code">rg_solicitations</span>
+    </div>
+    <div class="info-row">
+      <span class="info-label">Status</span>
+      <span style="font-size:13px;color:var(--nm)">em_analise · reembolsado · parcial · negado</span>
+    </div>
+    <div class="info-row">
+      <span class="info-label">Ativação lojista</span>
+      <span class="info-code">rg_activated = '1'</span>
+    </div>
+    <div class="info-row">
+      <span class="info-label">Data ativação</span>
+      <span class="info-code">rg_act_date</span>
+    </div>
+  </div>
+</div>
+
+<div class="pending">
+  <div class="pending-title">Pendências abertas</div>
+  <div class="pending-list">
+    <div class="pending-item" style="opacity:.4;text-decoration:line-through">View desativada (#voff) — fiel ao Figma ✓</div>
+    <div class="pending-item" style="opacity:.4;text-decoration:line-through">Admin — telas detalhe finalizados com card de resultado ✓</div>
+    <div class="pending-item" style="opacity:.4;text-decoration:line-through">Admin — seed de dados unificado (dest/destinatario, ch/chamado) ✓</div>
+    <div class="pending-item" style="opacity:.4;text-decoration:line-through">Admin — tela analisar completa (cards Pedido, Envio, Informações) ✓</div>
+  </div>
+</div>
+
+<div class="note">Figma: <a href="https://www.figma.com/design/UNY8LMXVndJBSirtTuTGbP/Reembolso-Garantido" target="_blank" style="color:var(--primary-base)">Reembolso Garantido</a> · Servidor: <code style="font-size:11px;background:var(--primary-soft);color:var(--primary-base);padding:1px 5px;border-radius:3px">localhost:8080</code></div>
+
+<script>
+function getS(){try{return JSON.parse(localStorage.getItem('rg_solicitations')||'[]')}catch{return[]}}
+function isActive(){return localStorage.getItem('rg_activated')==='1'}
+
+function refresh(){
+  const list = getS();
+  const novas = list.filter(s=>s.status==='em_analise').length;
+  const total = list.length;
+  const active = isActive();
+
+  // lojista
+  document.getElementById('dot-rg').className = 'dot ' + (active ? 'green' : '');
+  document.getElementById('txt-rg').textContent = active ? 'Reembolso Garantido ativo' : 'Serviço não ativado (abre na LP)';
+  const cntRg = document.getElementById('cnt-rg');
+  if(total > 0){ cntRg.style.display='inline'; cntRg.textContent = total + ' solicitaç' + (total===1?'ão':'ões') }
+  else cntRg.style.display='none';
+
+  // admin
+  document.getElementById('dot-adm').className = 'dot ' + (novas > 0 ? 'blue' : '');
+  document.getElementById('txt-adm').textContent = novas > 0 ? novas + ' nova' + (novas===1?'':'s') + ' na fila de análise' : 'Fila de novas vazia';
+  const cntAdm = document.getElementById('cnt-adm');
+  if(novas > 0){ cntAdm.style.display='inline'; cntAdm.textContent = novas + ' nova' + (novas===1?'':'s') }
+  else cntAdm.style.display='none';
+}
+
+function resetLojista(){
+  localStorage.removeItem('rg_activated');
+  localStorage.removeItem('rg_act_date');
+  localStorage.removeItem('rg_solicitations');
+  refresh();
+}
+function resetAdmin(){
+  localStorage.removeItem('rg_solicitations');
+  refresh();
+}
+
+refresh();
+setInterval(refresh, 2000);
+</script>
+</body>
+</html>

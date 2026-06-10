@@ -1,172 +1,275 @@
-# Olist Design System — Especialista (v2.1)
+# Reembolso Garantido — Olist Envios
 
-Skill corporativa para criação de telas, componentes e protótipos a partir de SDDs/PRDs usando o design system da Olist.
+> **Sistema de gestão de reembolsos para lojistas e administradores**
 
-Compatível com a especificação [DESIGN.md do Google Labs](https://github.com/google-labs-code/design.md).
+[![GitHub](https://img.shields.io/badge/GitHub-Repo-black?logo=github)](https://github.com/jonprofissionalux-cloud/Reembolso-Envios)
+[![Pages](https://img.shields.io/badge/GitHub%20Pages-Live-blue)](https://jonprofissionalux-cloud.github.io/Reembolso-Envios/)
+[![Figma](https://img.shields.io/badge/Figma-Design-F24E1E?logo=figma)](https://www.figma.com/design/UNY8LMXVndJBSirtTuTGbP/Reembolso-Garantido)
 
-## Por que funciona
+---
 
-A precisão de 90%+ na reutilização do design system vem de três decisões:
+## 📋 Quick Links
 
-1. **Referências separadas** — cada dimensão do DS tem seu arquivo. O agente carrega só o necessário.
-2. **Mapa de fontes** — cada regra aponta para o arquivo real no código. O agente confirma com evidência.
-3. **SDD para Tela** — guia que traduz requisitos funcionais em decisões de UI concretas.
+| Link | Descrição |
+|------|-----------|
+| **Local** | `/Users/jonazzolini/.claude/skills/` |
+| **GitHub Repo** | https://github.com/jonprofissionalux-cloud/Reembolso-Envios |
+| **GitHub Pages** | https://jonprofissionalux-cloud.github.io/Reembolso-Envios/ |
+| **Figma Design** | https://www.figma.com/design/UNY8LMXVndJBSirtTuTGbP/Reembolso-Garantido |
+| **Branch** | `main` |
 
-## Novidades v2.1 (2026-05-19)
+---
 
-### FileKeys do Figma embutidos no SKILL.md:
-- **Prioridade 1:** `HeyN4w209HWh8rfpTDiwyf` — Foundations, Components & Icons Rebrand (TO-BE)
-- **Prioridade 2:** `QJmwu6sR06xmyGAoBaXuEn` — Components Web (AS-IS)
-- Funciona tanto no Claude.ai (ZIP) quanto no Claude Code (projeto local)
-- Se `.claude/figma-config.json` existir no projeto, ele tem prioridade
-
-### Novos arquivos:
-- **`FIGMA_CONFIG.md`** — Guia de uso dos fileKeys e configuração do Figma
-- **`SETUP.md`** — Guia de instalação para novos usuários
-- **`figma-config.example.json`** — Template para configuração local (opcional)
-
-### v2.0 (2026-05-04):
-- **`GLOSSARIO_PAPEIS_TEXTO.md`** — Define como nomear cada tipo de texto (Heading, Label, Error, etc.)
-- **`SDD_AVANCADO.md`** — Traduz seções técnicas do SDD (RNFs, DACI, Métricas, Rollout) em UI
-- Incrementos em `TIPOGRAFIA.md`, `SDD_PARA_TELA.md`, `VISAO_GERAL.md`
-
-## Estrutura
-
-```
-olist-ds-specialist/
-├── SKILL.md                              # Papel, escopo, fluxo de decisão, fileKeys do Figma
-├── DESIGN.md                             # Especificação Google Labs (cross-tool)
-├── README.md                             # Este arquivo
-├── SETUP.md                              # Guia de instalação
-├── figma-config.example.json             # Template para configuração local (opcional)
-└── references/
-    ├── VISAO_GERAL.md                    # Sempre lido primeiro — mapa de navegação
-    ├── FIGMA_CONFIG.md                   # Guia de uso dos fileKeys e configuração
-    ├── CORES.md                          # Sistema de cores com regras
-    ├── TIPOGRAFIA.md                     # Fontes, tamanhos, composições
-    ├── GLOSSARIO_PAPEIS_TEXTO.md         # Definição dos 10 papéis de texto
-    ├── ESPACAMENTO.md                    # Escala, grid, border-radius
-    ├── COMPONENTES.md                    # Componentes com props (auto-gerado)
-    ├── PADROES.md                        # Padrões de página
-    ├── MAPA_FONTES.md                    # Mapa de arquivos (auto-gerado)
-    ├── SDD_PARA_TELA.md                  # Tradução SDD → UI (10 passos)
-    ├── SDD_AVANCADO.md                   # Tradução de seções técnicas do SDD
-    └── CHECKLIST_REVISAO.md              # Checklist de revisão visual
-```
-
-## Fontes do Figma
-
-A skill usa dois arquivos do Figma como fonte da verdade:
-
-| Prioridade | Arquivo | FileKey |
-|---|---|---|
-| 1º (buscar primeiro) | Foundations, Components & Icons Rebrand (TO-BE) | `HeyN4w209HWh8rfpTDiwyf` |
-| 2º (fallback) | Components Web (AS-IS) | `QJmwu6sR06xmyGAoBaXuEn` |
-
-Estes fileKeys estão embutidos no SKILL.md e funcionam em qualquer contexto (Claude.ai ou Claude Code).
-
-Para customizar (adicionar/remover arquivos), crie `.claude/figma-config.json` no projeto — ele tem prioridade sobre os fileKeys embutidos.
-
-## Instalação
-
-### Opção 1: Script automático (recomendado)
+## 🛠️ Setup Local
 
 ```bash
-unzip olist-ds-kit.zip
-cd olist-ds-kit
-bash setup.sh
+# Abrir pasta
+cd /Users/jonazzolini/.claude/skills
+
+# Listar arquivos
+ls -la
+
+# Editar um arquivo
+open index.html
 ```
 
-O script copia a skill, o figma-config.json e atualiza o .gitignore automaticamente.
-
-### Opção 2: Claude Code (manual)
+### Deploy após alterações
 
 ```bash
-mkdir -p .claude/skills
-cp -r olist-ds-specialist-v2/ .claude/skills/olist-ds-specialist/
+cd /Users/jonazzolini/.claude/skills
+git add -A
+git commit -m "descrição da alteração"
+git push origin main
 ```
 
-### Opção 3: Claude.ai
+> **Nota**: GitHub Pages atualiza automaticamente após `git push`
 
-1. Settings → Customize → Skills
-2. Upload → selecionar o ZIP ou a pasta `olist-ds-specialist-v2/`
-3. Ativar a skill
+---
 
-Na opção Claude.ai, os fileKeys do Figma já estão embutidos no SKILL.md — não precisa de configuração adicional.
+## 🎯 Stack Técnico
 
-### Opção 4: Compartilhada via Git
+| Tecnologia | Descrição |
+|------------|-----------|
+| **HTML/CSS/JS** | Puro — Zero frameworks |
+| **Armazenamento** | `localStorage` (chave: `rg_solicitations`) |
+| **Versionamento** | Git + GitHub |
+| **Deploy** | GitHub Pages |
+| **Design System** | Figma (WIP) |
 
-```bash
-cp -r olist-ds-specialist-v2/ .claude/skills/olist-ds-specialist/
-git add .claude/skills/
-git commit -m "feat: skill corporativa do design system v2.1"
+---
+
+## 📁 Estrutura de Arquivos
+
+```
+~/.claude/skills/
+├── index.html          # Landing inicial
+├── lojista.html        # Dashboard lojista (3 views)
+├── admin.html          # Dashboard admin (2 tabs)
+├── hero-lojista.jpg    # Imagem hero
+└── README.md           # Este arquivo
 ```
 
-## Uso
+---
 
-### Básico (traduzir SDD em UI)
+## 🏗️ Estado Atual Completo
+
+### **lojista.html** — 3 Views
+
+#### 1️⃣ **Landing Page (`#vlp`)**
+- Apresentação do serviço
+- Botão "Ativar Reembolso Garantido"
+- Ativa `rg_activated = '1'` + `rg_act_date`
+
+#### 2️⃣ **Serviço Ativo (`#vact`)**
+3 Tabs principais:
+
+##### **Tab 1: Abrir Solicitação**
+- Barra de busca com dropdown de filtro
+- Opções de filtro: "Número da Nota Fiscal" / "Código do Rastreio"
+- Placeholder muda conforme seleção
+- 5 mocks de busca (001–005)
+- `overflow:visible` corrigido para dropdown aparecer
+
+##### **Tab 2: Solicitações em Aberto**
+- Cards horizontais com:
+  - Data + tempo de análise
+  - Destinatário + endereço completo
+  - NF (Nota Fiscal)
+  - Valor
+  - Badge "Em Análise"
+  - Botão `···` (more-horizontal) → dropdown
+- Dropdown options: "Ver solicitação" / "Cancelar solicitação"
+- Ao clicar em outro `···`, fecha o anterior
+- **Modal "Ver Solicitação"** (em aberto):
+  - Stepper 3 barras: Solicitação criada → Em análise → Finalizada
+  - Resumo: NF, Destinatário, Transportadora, Valor NF, Rastreio, Status
+  - Informações adicionais
+  - Arquivos anexados
+
+##### **Tab 3: Finalizados**
+- Cards horizontais com:
+  - Data
+  - Destinatário + endereço
+  - NF
+  - Valor
+  - Coluna "Resultado" (badge + data + valor reembolso ou motivo)
+  - Botão `···` (dropdown variável por status)
+- **Dropdown por status**:
+  - **Reembolsado**: "Ver solicitação" + "Ver reembolso"
+  - **Parcial**: "Ver solicitação" + "Ver reembolso"
+  - **Negado**: "Ver solicitação" + "Reabrir solicitação"
+- **Modal unificado finalizados** (`ml-final-solic`):
+  - Seção "Resultado na análise" (badge + dados por status + link ver extrato)
+  - Resumo (2 etiquetas)
+  - Informações adicionais
+  - Arquivos
+
+#### 3️⃣ **Serviço Desativado (`#voff`)**
+- Banner de alerta
+- Tabs com histórico somente leitura (sem interações)
+- Ativa `rg_deactivated = '1'`
+
+---
+
+### **admin.html** — 2 Tabs
+
+#### 1️⃣ **Novas Solicitações**
+- Tabela com:
+  - SLA badge
+  - Reincidência indicator
+- Detalhe (ao clicar em linha):
+  - 3 Cards: Pedido, Envio, Informações
+  - Drawers para ações:
+    - Aprovar (reembolso total)
+    - Parcial (com motivo)
+    - Negar (com motivo)
+
+#### 2️⃣ **Finalizadas**
+- Tabela com status finalizados
+- Detalhe (ao clicar):
+  - Card de resultado colorido
+  - Cards Pedido e Envio
+  - Informações read-only
+
+---
+
+## 🗄️ Seed de Dados
+
+Estrutura `localStorage` com 5 itens de teste:
+
+| ID | Status | NF | Cliente | Valor | Motivo |
+|------|--------|-------|---------|-------|--------|
+| REE-00000001 | em_analise | 82630312 | Gustavo Moreira | — | — |
+| REE-00000002 | em_analise | 55566677788 | Carlos Eduardo | — | — |
+| REE-00000010 | reembolsado | (alguma) | Maria Santos | R$ 180,00 | — |
+| REE-00000011 | parcial | (alguma) | Ana Paula | R$ 210,00 | "O outro pacote foi entregue." |
+| REE-00000012 | negado | (alguma) | Roberto Silva | — | "Pedido entregue conforme rastreio." |
+
+**Chave localStorage**: `rg_solicitations` (array de objetos)
+
+---
+
+## 🔧 MCPs Disponíveis
+
+| MCP | Uso | Status |
+|-----|-----|--------|
+| **filesystem** | Leitura/escrita em `~/.claude/skills/` | ✅ Ativo |
+| **figma** | Acesso ao Figma Desktop | ✅ Ativo |
+| **Claude in Chrome** | Automação do navegador para testes | ✅ Ativo |
+
+---
+
+## 🔐 localStorage Schema
+
+```javascript
+// Chave principal
+const rg_solicitations = [
+  {
+    id: "REE-00000001",
+    status: "em_analise" | "reembolsado" | "parcial" | "negado",
+    nf: "82630312",
+    rastreio: "ABC123456",
+    cliente: {
+      nome: "Gustavo Moreira",
+      endereco: "Rua X, 123, Apto 456 — São Paulo, SP"
+    },
+    valor: 150.00,
+    transportadora: "Sedex",
+    dataCriacao: "2024-01-15",
+    dataAnalise: "2024-01-20",
+    dataFinalizacao: null,
+    motivo: null, // preenchido se parcial ou negado
+    valorReembolso: null, // preenchido se reembolsado ou parcial
+    arquivos: []
+  }
+];
+
+// Flags de ativação
+const rg_activated = "1"; // string (presença = ativado)
+const rg_act_date = "2024-01-10"; // data de ativação
+const rg_deactivated = "1"; // string (presença = desativado)
 ```
-Use $olist-ds-specialist para criar a tela deste SDD:
-[COLAR SDD AQUI]
+
+---
+
+## 📱 UI/UX Notes
+
+- ✅ Dropdown filtro com `overflow:visible` corrigido
+- ✅ Placeholder dinâmico conforme filtro selecionado
+- ✅ Dropdown more-horizontal fecha ao clicar em outro
+- ✅ Modal stepper visual (3 etapas)
+- ✅ Cards unificados para diferentes status
+- ✅ Reset corrigido (limpa `rg_deactivated` também)
+
+---
+
+## 📋 Checklist de Features
+
+- [x] Landing page lojista (ativação)
+- [x] Dashboard lojista (3 tabs)
+- [x] Busca com filtro dropdown
+- [x] Cards solicitações (em aberto + finalizados)
+- [x] Modal "Ver solicitação"
+- [x] Dropdown mais-opções (···)
+- [x] Dashboard admin (2 tabs)
+- [x] Admin detalhe + drawers
+- [x] Seed de dados (5 itens)
+- [x] localStorage persistence
+- [ ] Validações avançadas
+- [ ] Export de reembolsos (PDF/CSV)
+- [ ] Notificações em tempo real
+- [ ] Integração API Olist (futura)
+
+---
+
+## 🚀 Próximos Passos
+
+1. **Sincronizar Figma** → Exportar tokens/componentes
+2. **Validações** → Adicionar regras de negócio
+3. **Testes** → QA no navegador
+4. **Polish UI** → Micro-interações, animations
+5. **API** → Integração com backend (quando disponível)
+
+---
+
+## 📞 Referências Rápidas
+
+**Figma Design File:**
+```
+https://www.figma.com/design/UNY8LMXVndJBSirtTuTGbP/Reembolso-Garantido
 ```
 
-### Avançado (SDDs com RNFs, DACI, Métricas)
+**GitHub Repo:**
 ```
-Use $olist-ds-specialist para criar UI completa deste SDD,
-incluindo decisões de RNFs, DACI e Métricas de Sucesso:
-[COLAR SDD COMPLETO AQUI]
+https://github.com/jonprofissionalux-cloud/Reembolso-Envios
 ```
 
-### Revisão de UI
+**Pages ao vivo:**
 ```
-Use $olist-ds-specialist para revisar se esta tela segue 
-as regras do design system Olist:
-[COLAR CÓDIGO OU SCREENSHOT]
+https://jonprofissionalux-cloud.github.io/Reembolso-Envios/
 ```
 
-### Figma (criação faseada com validação)
-```
-Use $olist-ds-specialist para criar UI completa no Figma:
-[COLAR SDD AQUI OU ANEXAR ARQUIVO]
-```
+---
 
-Claude vai:
-1. Listar todas as telas identificadas e aguardar validação
-2. Buscar componentes nos arquivos do Figma (TO-BE primeiro, AS-IS como fallback)
-3. Criar tela por tela, aguardando feedback a cada entrega
-4. Aplicar Auto Layout, tokens e nomenclatura semântica
-
-## Auto-sync
-
-A cada `npm run build`, os arquivos `COMPONENTES.md`, `MAPA_FONTES.md` e `VISAO_GERAL.md` são regenerados com o estado real do código.
-
-A cada `npm run wiki`, o Wiki do projeto é atualizado com métricas, componentes e status atuais.
-
-## Manutenção
-
-- Atualizar `MAPA_FONTES.md` quando novos componentes forem criados (automático)
-- Atualizar `CORES.md` e `TIPOGRAFIA.md` quando tokens mudarem
-- Atualizar `GLOSSARIO_PAPEIS_TEXTO.md` se novos papéis de texto forem criados
-- Atualizar fileKeys no SKILL.md se os arquivos do Figma mudarem
-- Nunca promover comportamento inferido como padrão sem validar no código real
-
-## Changelog
-
-### v2.1 (2026-05-19)
-- FileKeys do Figma embutidos no SKILL.md (funciona sem figma-config.json)
-- Adicionado `FIGMA_CONFIG.md` (12º arquivo de referência)
-- Adicionado `SETUP.md` (guia de instalação)
-- Adicionado `figma-config.example.json` (template)
-- Adicionado `setup.sh` (instalação automática)
-- Adicionado `generate-wiki.mjs` (Wiki auto-gerado)
-- Atualizado `sync-skill.mjs` para v2.1
-
-### v2.0 (2026-05-04)
-- Adicionado `GLOSSARIO_PAPEIS_TEXTO.md` (10 papéis de texto)
-- Adicionado `SDD_AVANCADO.md` (RNFs, DACI, Métricas, Rollout, Observabilidade)
-- Incrementado `SDD_PARA_TELA.md` (passos 8, 9, 10)
-- Incrementado `TIPOGRAFIA.md` (mapeamento papéis → tokens)
-- Incrementado `VISAO_GERAL.md` (mapa de navegação v2.0)
-
-### v1.0 (2026-01-12)
-- Release inicial com 9 arquivos de referência
+**Última atualização**: Junho 2026  
+**Mantido por**: Jonathan Azzolini

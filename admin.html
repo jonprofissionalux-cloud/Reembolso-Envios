@@ -332,12 +332,12 @@ body{font-family:var(--font);background:var(--bg);color:var(--ns);min-height:100
       <!-- CARD INFORMAÇÕES LOJISTA -->
       <div style="background:var(--primary-softer);border-radius:12px;padding:24px;display:flex;flex-direction:column;gap:16px">
         <div style="font-size:18px;font-weight:600;color:var(--ns)">Informações do lojista</div>
-        <div style="font-size:16px;color:var(--ns);line-height:1.6">
-          Inacreditável! Segunda vez na semana que a transportadora simplesmente 'esquece' de bipar os pacotes na coleta. O cliente achando que eu não enviei, o suporte do marketplace ameaçando penalizar a conta e eu aqui sem os comprovantes. Resolver logística no Brasil é teste pra cardíaco! 🤡📦❌ #ecommerce #lojista
+        <div id="dn-info-box" style="font-size:16px;color:var(--ns);line-height:1.6">
+          Sem informações adicionais.
         </div>
         <div>
           <div style="font-size:12px;color:var(--nb);text-transform:uppercase;font-weight:600;margin-bottom:8px">Anexo</div>
-          <div style="display:flex;gap:16px;flex-wrap:wrap">
+          <div id="dn-anexos" style="display:flex;gap:16px;flex-wrap:wrap">
             <div style="background:var(--bg);border-radius:16px;padding:8px 16px;display:flex;gap:8px;align-items:center;cursor:pointer">
               📎 <span style="font-weight:600;color:var(--ns)">print_img.jpg</span>
             </div>
@@ -570,6 +570,13 @@ function openNovas(idx) {
   document.getElementById('dapp-total').textContent = max;
   document.getElementById('partial-max-hint').textContent = 'Maximo disponivel: ' + max;
   document.getElementById('d-novas-title').textContent = s.destinatario;
+  // Exibir informações do lojista
+  document.getElementById('dn-info-box').textContent = s.descricao || 'Sem informações adicionais.';
+  if (s.anexos && s.anexos.length > 0) {
+    document.getElementById('dn-anexos').innerHTML = s.anexos.map(a => 
+      `<div style="background:var(--bg);border-radius:16px;padding:8px 16px;display:flex;gap:8px;align-items:center;cursor:pointer">📎 <span style="font-weight:600;color:var(--ns)">${a}</span></div>`
+    ).join('');
+  }
   showDetail('novas');
 }
 

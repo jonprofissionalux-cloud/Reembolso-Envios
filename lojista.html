@@ -763,7 +763,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--ns);min-height:100
     </div>
     <hr class="ml-divider">
     <div class="ml-sec-title">Informacoes adicionais do lojista</div>
-    <div class="ml-info-text" id="mop-info">Sem informacoes adicionais.</div>
+    <div class="ml-info-text" id="mop-info"></div>
     <div class="ml-files">
       <div class="ml-file"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 2h6l4 4v8a1 1 0 01-1 1H4a1 1 0 01-1-1V3a1 1 0 011-1z"/><path d="M10 2v4h4"/></svg>arquivo 01.png</div>
       <div class="ml-file"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 2h6l4 4v8a1 1 0 01-1 1H4a1 1 0 01-1-1V3a1 1 0 011-1z"/><path d="M10 2v4h4"/></svg>arquivo 02.pdf</div>
@@ -813,7 +813,7 @@ function toggleFaq(item){
 const LS='rg_solicitations',LA='rg_activated',LD='rg_act_date';
 const getS=()=>{try{return JSON.parse(localStorage.getItem(LS)||'[]')}catch{return[]}};
 const setS=l=>localStorage.setItem(LS,JSON.stringify(l));
-function fmtDate(ts){return new Date(ts).toLocaleDateString('pt-BR')}
+function fmtDate(ts){const d=new Date(ts);const dd=String(d.getDate()).padStart(2,'0');const mm=String(d.getMonth()+1).padStart(2,'0');const yy=d.getFullYear();return dd+'/'+mm+'/'+yy}
 
 function seedLojista(){
   if(getS().length>0)return;
@@ -956,11 +956,33 @@ function submitSolic(){
   const ch=document.getElementById('inp-ch').value.trim();
   if(!ch){document.getElementById('inp-ch').style.borderColor='var(--err)';document.getElementById('inp-ch').focus();return}
   document.getElementById('inp-ch').style.borderColor='';
-  const proto='REE-'+Date.now().toString().slice(-8);
+  
+  const det=document.getElementById('inp-det').value.trim();
+  const anexos=['exemplo_foto_001.jpg','comprovante_rastreio.pdf','nota_fiscal_copia.pdf'];
+  
+  const now=Date.now();
+  const proto='REE-'+now.toString().slice(-8)+'-'+Math.random().toString(36).substr(2,5).toUpperCase();
   document.getElementById('proto-num').textContent=proto;
-  const list=getS().filter(s=>!(s.nf===_curNF&&s.status==='negado'));
-  list.push({id:proto,nf:_curNF,destinatario:_curDest,dest:_curDest,chamado:ch,ch,status:'em_analise',valor:'R$ 226,24',val:'R$ 226,24',data:fmtDate(Date.now()),timestamp:Date.now()});
-  setS(list);
+  
+  // Contar reincidencia (quantas vezes este NF foi solicitado)
+  const allSolics=getS();
+  const countNF=allSolics.filter(s=>s.nf===_curNF).length;
+  
+  // Criar nova solicitacao com todos os dados
+  const novaSolic={
+    id:proto,nf:_curNF,destinatario:_curDest,dest:_curDest,
+    chamado:ch,ch,
+    status:'em_analise',
+    valor:'R$ 226,24',val:'R$ 226,24',
+    data:fmtDate(now),timestamp:now,ts:now,
+    descricao:det||'',
+    anexos:anexos,
+    reincidencia:countNF
+  };
+  
+  allSolics.push(novaSolic);
+  setS(allSolics);
+  
   document.getElementById('solic-form').style.display='none';
   document.getElementById('solic-suc').style.display='flex';
 }
@@ -972,6 +994,11 @@ function tempoAnalise(ts){
   if(dias===1)return'Ha 1 dia';
   return'Ha '+dias+' dias';
 }
+function countReincidencia(nf){
+  const allAbertos=getS().filter(s=>s.nf===nf);
+  return Math.max(0,allAbertos.length-1);
+}
+
 function renderOpenList(){
   const list=getS().filter(s=>s.status==='em_analise');
   const c=document.getElementById('open-list');
@@ -1000,7 +1027,7 @@ function renderOpenList(){
   }).join('');
 }
 function renderFinalList(){
-  const list=getS().filter(s=>s.status!=='em_analise');
+  const list=getS().filter(s=>s.status!=='em_analise').sort((a,b)=>(b.timestamp||b.ts||0)-(a.timestamp||a.ts||0));
   const c=document.getElementById('final-list');
   if(!list.length){c.innerHTML='<div class="empty-st"><p>Nenhuma solicitacao finalizada</p></div>';return}
   const bdgCls={reembolsado:'bdg-r',parcial:'bdg-par',negado:'bdg-neg'};
@@ -1051,7 +1078,7 @@ function openOpenDet(id){
   document.getElementById('mop-val').textContent=s.valor||s.val||'';
   document.getElementById('mop-step-criada').textContent=dt;
   document.getElementById('mop-step-analise').textContent=dt;
-  document.getElementById('mop-info').textContent=s.descricao||'Sem informacoes adicionais.';
+  document.getElementById('mop-info').textContent=s.descricao||'';
   oml('ml-open');
 }
 // abre modal unificado de finalizado (ver solicitacao)
@@ -1075,7 +1102,7 @@ function openFinalSolic(id){
   document.getElementById('mfs-nf').textContent=s.nf;
   document.getElementById('mfs-dest').textContent=s.destinatario||s.dest||'';
   document.getElementById('mfs-val').textContent=s.valor||s.val||'';
-  document.getElementById('mfs-info').textContent=s.descricao||'Sem informacoes adicionais.';
+  document.getElementById('mfs-info').textContent=s.descricao||'';
   oml('ml-final-solic');
 }
 // ver reembolso — abre drawer simples (proto: mesmo modal simplificado)

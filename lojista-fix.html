@@ -1,0 +1,84 @@
+<!-- Este é um arquivo de REFERÊNCIA com as funções corrigidas -->
+<!-- Copie e cole as funções abaixo diretamente no seu lojista.html -->
+
+<!-- FUNÇÃO 1: Formatar data com hora (substitua a função fmtDate) -->
+<script>
+function fmtDate(ts){return new Date(ts).toLocaleDateString('pt-BR')}
+function fmtDateTime(ts){
+  const agora=Date.now();
+  const diff=agora-ts;
+  if(diff<60000)return'Agora pouco'; // menos de 1 minuto
+  if(diff<3600000){const min=Math.floor(diff/60000);return'Ha '+min+' min'+（min>1?'s':'')} // menos de 1 hora
+  if(diff<86400000){const h=Math.floor(diff/3600000);return'Ha '+h+' h'+(h>1?'s':'')} // menos de 1 dia
+  return fmtDate(ts)+' '+new Date(ts).getHours().toString().padStart(2,'0')+'h'+new Date(ts).getMinutes().toString().padStart(2,'0');
+}
+
+// FUNÇÃO 2: submitSolic() - CORRIGIDA (substitua a função existente)
+function submitSolic(){
+  const ch=document.getElementById('inp-ch').value.trim();
+  if(!ch){document.getElementById('inp-ch').style.borderColor='var(--err)';document.getElementById('inp-ch').focus();return}
+  document.getElementById('inp-ch').style.borderColor='';
+  
+  const det=document.getElementById('inp-det').value.trim();
+  const anexos=['exemplo_foto_001.jpg','comprovante_rastreio.pdf','nota_fiscal_copia.pdf'];
+  
+  const proto='REE-'+Date.now().toString().slice(-8)+'-'+Math.random().toString(36).substr(2,5).toUpperCase();
+  const agora=Date.now();
+  document.getElementById('proto-num').textContent=proto;
+  
+  const allSolics=getS();
+  const countNF=allSolics.filter(s=>s.nf===_curNF).length;
+  
+  const novaSolic={
+    id:proto,nf:_curNF,destinatario:_curDest,dest:_curDest,
+    chamado:ch,ch,
+    status:'em_analise',
+    valor:'R$ 226,24',val:'R$ 226,24',
+    data:fmtDate(agora),timestamp:agora,ts:agora,
+    descricao:det,  // MENSAGEM DO LOJISTA
+    anexos:anexos,  // ARQUIVOS
+    reincidencia:countNF
+  };
+  
+  allSolics.push(novaSolic);
+  setS(allSolics);
+  
+  document.getElementById('solic-form').style.display='none';
+  document.getElementById('solic-suc').style.display='flex';
+}
+
+// FUNÇÃO 3: openOpenDet() - CORRIGIDA (substitua a função existente)
+function openOpenDet(id){
+  const s=getS().find(x=>x.id===id);if(!s)return;
+  
+  // Data/hora com "Agora pouco"
+  const dtCriada=fmtDateTime(s.timestamp||s.ts||Date.now());
+  
+  document.getElementById('mop-nf').textContent=s.nf;
+  document.getElementById('mop-dest').textContent=s.destinatario||s.dest||'';
+  document.getElementById('mop-val').textContent=s.valor||s.val||'';
+  document.getElementById('mop-step-criada').textContent=dtCriada;
+  document.getElementById('mop-step-analise').textContent=dtCriada;
+  
+  // EXIBIR MENSAGEM DO LOJISTA
+  document.getElementById('mop-info').textContent=s.descricao||'Sem informacoes adicionais.';
+  
+  // EXIBIR ANEXOS REAIS
+  const mlFiles=document.querySelector('#ml-open .ml-files');
+  if(s.anexos && s.anexos.length>0){
+    mlFiles.innerHTML=s.anexos.map(a=>`<div class="ml-file"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 2h6l4 4v8a1 1 0 01-1 1H4a1 1 0 01-1-1V3a1 1 0 011-1z"/><path d="M10 2v4h4"/></svg>${a}</div>`).join('');
+  }
+  
+  oml('ml-open');
+}
+
+// FUNÇÃO 4: openFinalSolic() - CORRIGIDA (encontre a função e atualize antes de oml)
+// Adicione ANTES da linha: oml('ml-final-solic');
+
+  // EXIBIR ANEXOS REAIS NO MODAL FINALIZADO
+  const mlFilesFinal=document.querySelector('#ml-final-solic .ml-files');
+  if(s.anexos && s.anexos.length>0){
+    mlFilesFinal.innerHTML=s.anexos.map(a=>`<div class="ml-file"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 2h6l4 4v8a1 1 0 01-1 1H4a1 1 0 01-1-1V3a1 1 0 011-1z"/><path d="M10 2v4h4"/></svg>${a}</div>`).join('');
+  }
+
+</script>

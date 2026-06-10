@@ -8,7 +8,7 @@
 
 ---
 
-## 📋 Quick Links
+## Quick Links
 
 | Link | Descrição |
 |------|-----------|
@@ -16,21 +16,17 @@
 | **GitHub Repo** | https://github.com/jonprofissionalux-cloud/Reembolso-Envios |
 | **GitHub Pages** | https://jonprofissionalux-cloud.github.io/Reembolso-Envios/ |
 | **Figma Design** | https://www.figma.com/design/UNY8LMXVndJBSirtTuTGbP/Reembolso-Garantido |
+| **Figma node — Admin Detalhe** | node-id: `175-80793` |
+| **Design System (ícones/tokens)** | https://github.com/pedrohenriquevalentim/olist-ds |
 | **Branch** | `main` |
 
 ---
 
-## 🛠️ Setup Local
+## Setup Local
 
 ```bash
-# Abrir pasta
 cd /Users/jonazzolini/.claude/skills
-
-# Listar arquivos
 ls -la
-
-# Editar um arquivo
-open index.html
 ```
 
 ### Deploy após alterações
@@ -38,192 +34,206 @@ open index.html
 ```bash
 cd /Users/jonazzolini/.claude/skills
 git add -A
-git commit -m "descrição da alteração"
+git commit -m "tipo(escopo): descrição"
 git push origin main
 ```
 
-> **Nota**: GitHub Pages atualiza automaticamente após `git push`
+> GitHub Pages atualiza automaticamente após `git push`.
 
 ---
 
-## 🎯 Stack Técnico
+## Stack Técnico
 
 | Tecnologia | Descrição |
 |------------|-----------|
-| **HTML/CSS/JS** | Puro — Zero frameworks |
+| **HTML/CSS/JS** | Puro — zero frameworks |
 | **Armazenamento** | `localStorage` (chave: `rg_solicitations`) |
 | **Versionamento** | Git + GitHub |
 | **Deploy** | GitHub Pages |
-| **Design System** | Figma (WIP) |
+| **Design System** | Olist DS — repo: `pedrohenriquevalentim/olist-ds` |
 
 ---
 
-## 📁 Estrutura de Arquivos
+## Estrutura de Arquivos
 
 ```
 ~/.claude/skills/
-├── index.html          # Landing inicial
-├── lojista.html        # Dashboard lojista (3 views)
-├── admin.html          # Dashboard admin (2 tabs)
-├── hero-lojista.jpg    # Imagem hero
-└── README.md           # Este arquivo
+├── index.html              # Landing inicial
+├── lojista.html            # Dashboard lojista (3 views)
+├── admin.html              # Dashboard admin (2 tabs + detail view)
+├── hero-lojista.jpg        # Imagem hero
+├── _sb_icons_patch.html    # Ícones do sidebar (SVGs do DS)
+├── references/             # Docs do Design System (cores, tipografia, componentes...)
+└── README.md               # Este arquivo
 ```
 
 ---
 
-## 🏗️ Estado Atual Completo
+## Estado Atual Completo
 
-### **lojista.html** — 3 Views
+### lojista.html — 3 Views
 
-#### 1️⃣ **Landing Page (`#vlp`)**
+#### View 1: Landing Page (`#vlp`)
 - Apresentação do serviço
 - Botão "Ativar Reembolso Garantido"
 - Ativa `rg_activated = '1'` + `rg_act_date`
 
-#### 2️⃣ **Serviço Ativo (`#vact`)**
-3 Tabs principais:
+#### View 2: Serviço Ativo (`#vact`) — 3 Tabs
 
-##### **Tab 1: Abrir Solicitação**
+**Tab 1: Abrir Solicitação**
 - Barra de busca com dropdown de filtro
-- Opções de filtro: "Número da Nota Fiscal" / "Código do Rastreio"
+- Opções: "Número da Nota Fiscal" / "Código do Rastreio"
 - Placeholder muda conforme seleção
 - 5 mocks de busca (001–005)
 - `overflow:visible` corrigido para dropdown aparecer
 
-##### **Tab 2: Solicitações em Aberto**
-- Cards horizontais com:
-  - Data + tempo de análise
-  - Destinatário + endereço completo
-  - NF (Nota Fiscal)
-  - Valor
-  - Badge "Em Análise"
-  - Botão `···` (more-horizontal) → dropdown
-- Dropdown options: "Ver solicitação" / "Cancelar solicitação"
+**Tab 2: Solicitações em Aberto**
+- Cards horizontais: data, tempo de análise, destinatário + endereço, NF, valor, badge "Em Análise"
+- Botão `···` → dropdown "Ver solicitação" / "Cancelar solicitação"
 - Ao clicar em outro `···`, fecha o anterior
-- **Modal "Ver Solicitação"** (em aberto):
-  - Stepper 3 barras: Solicitação criada → Em análise → Finalizada
-  - Resumo: NF, Destinatário, Transportadora, Valor NF, Rastreio, Status
-  - Informações adicionais
-  - Arquivos anexados
+- Modal "Ver Solicitação": stepper 3 barras + resumo + informações adicionais + arquivos
 
-##### **Tab 3: Finalizados**
-- Cards horizontais com:
-  - Data
-  - Destinatário + endereço
-  - NF
-  - Valor
-  - Coluna "Resultado" (badge + data + valor reembolso ou motivo)
-  - Botão `···` (dropdown variável por status)
-- **Dropdown por status**:
-  - **Reembolsado**: "Ver solicitação" + "Ver reembolso"
-  - **Parcial**: "Ver solicitação" + "Ver reembolso"
-  - **Negado**: "Ver solicitação" + "Reabrir solicitação"
-- **Modal unificado finalizados** (`ml-final-solic`):
-  - Seção "Resultado na análise" (badge + dados por status + link ver extrato)
-  - Resumo (2 etiquetas)
-  - Informações adicionais
-  - Arquivos
+**Tab 3: Finalizados**
+- Cards horizontais: data, destinatário, NF, valor, resultado (badge + data + valor ou motivo)
+- Dropdown variável por status:
+  - Reembolsado: "Ver solicitação" + "Ver reembolso"
+  - Parcial: "Ver solicitação" + "Ver reembolso"
+  - Negado: "Ver solicitação" + "Reabrir solicitação"
+- Modal unificado (`ml-final-solic`): resultado + resumo + informações + arquivos
 
-#### 3️⃣ **Serviço Desativado (`#voff`)**
+#### View 3: Serviço Desativado (`#voff`)
 - Banner de alerta
-- Tabs com histórico somente leitura (sem interações)
+- Tabs com histórico somente leitura
 - Ativa `rg_deactivated = '1'`
 
 ---
 
-### **admin.html** — 2 Tabs
+### admin.html — 2 Tabs + Detail View
 
-#### 1️⃣ **Novas Solicitações**
-- Tabela com:
-  - SLA badge
-  - Reincidência indicator
-- Detalhe (ao clicar em linha):
-  - 3 Cards: Pedido, Envio, Informações
-  - Drawers para ações:
-    - Aprovar (reembolso total)
-    - Parcial (com motivo)
-    - Negar (com motivo)
+#### Tab 1: Novas Solicitações
+- Tabela: data, lojista, NF, reincidência, botão "analisar"
+- SLA badge (azul / amarelo / vermelho por dias)
 
-#### 2️⃣ **Finalizadas**
-- Tabela com status finalizados
-- Detalhe (ao clicar):
-  - Card de resultado colorido
-  - Cards Pedido e Envio
-  - Informações read-only
+#### Tab 2: Finalizadas
+- Tabela: data, lojista, NF, decisão, valor reembolsado, decisor
+
+#### Detail View — Novas (ao clicar "analisar")
+Comportamento: lista some com fade, detalhe aparece como nova página. Botão "Voltar" retorna à lista.
+
+Layout fiel ao Figma (node `175-80793`):
+- Breadcrumb: Inicio > Reembolso > Analisar
+- Botão "Voltar" (isolado, acima do título)
+- Header: Título (nome do lojista) + CNPJ + badge SLA à esquerda — 3 botões de ação à direita
+- Card "Pedido": 2 colunas — esquerda (Valor, NF-e, Emissão) / direita (nome, endereço, email, tel)
+- Card "Envio": transportadora + quantidade + tabela (Volume, Código de rastreio, Medidas e peso, Status, Valor)
+- Card "Informações do lojista": fundo azul claro (`--primary-softer`), texto livre + anexos
+
+#### Drawers de ação (Aprovar / Parcial / Negar)
+- Overlay + slide-in da direita
+- Aprovar: resumo financeiro + campo de justificativa opcional
+- Parcial: campo de valor + justificativa obrigatória
+- Negar: campo de motivo obrigatório
 
 ---
 
-## 🗄️ Seed de Dados
-
-Estrutura `localStorage` com 5 itens de teste:
+## Seed de Dados
 
 | ID | Status | NF | Cliente | Valor | Motivo |
-|------|--------|-------|---------|-------|--------|
-| REE-00000001 | em_analise | 82630312 | Gustavo Moreira | — | — |
-| REE-00000002 | em_analise | 55566677788 | Carlos Eduardo | — | — |
-| REE-00000010 | reembolsado | (alguma) | Maria Santos | R$ 180,00 | — |
-| REE-00000011 | parcial | (alguma) | Ana Paula | R$ 210,00 | "O outro pacote foi entregue." |
-| REE-00000012 | negado | (alguma) | Roberto Silva | — | "Pedido entregue conforme rastreio." |
+|----|--------|----|---------|----|--------|
+| REE-00000001 | em_analise | 82630312 | Gustavo Moreira Farias Silva | R$ 226,24 | — |
+| REE-00000002 | em_analise | 55566677788 | Carlos Eduardo Lima | R$ 350,00 | — |
+| REE-00000010 | reembolsado | 11122233344 | Maria Santos Oliveira | R$ 180,00 | — |
+| REE-00000011 | parcial | 99988877766 | Ana Paula Costa | R$ 420,00 | "O outro pacote foi entregue." |
+| REE-00000012 | negado | 33344455566 | Roberto Silva Nunes | R$ 290,00 | "Pedido entregue conforme rastreio." |
 
 **Chave localStorage**: `rg_solicitations` (array de objetos)
 
 ---
 
-## 🔧 MCPs Disponíveis
-
-| MCP | Uso | Status |
-|-----|-----|--------|
-| **filesystem** | Leitura/escrita em `~/.claude/skills/` | ✅ Ativo |
-| **figma** | Acesso ao Figma Desktop | ✅ Ativo |
-| **Claude in Chrome** | Automação do navegador para testes | ✅ Ativo |
-
----
-
-## 🔐 localStorage Schema
+## localStorage Schema
 
 ```javascript
 // Chave principal
-const rg_solicitations = [
+rg_solicitations = [
   {
     id: "REE-00000001",
     status: "em_analise" | "reembolsado" | "parcial" | "negado",
     nf: "82630312",
-    rastreio: "ABC123456",
-    cliente: {
-      nome: "Gustavo Moreira",
-      endereco: "Rua X, 123, Apto 456 — São Paulo, SP"
-    },
-    valor: 150.00,
-    transportadora: "Sedex",
-    dataCriacao: "2024-01-15",
-    dataAnalise: "2024-01-20",
-    dataFinalizacao: null,
-    motivo: null, // preenchido se parcial ou negado
-    valorReembolso: null, // preenchido se reembolsado ou parcial
-    arquivos: []
+    destinatario: "Gustavo Moreira Farias Silva",
+    chamado: "CHM-2024-00847",
+    valor: "R$ 226,24",
+    valorReembolsado: null,   // preenchido se reembolsado ou parcial
+    decisaoNota: null,         // motivo — preenchido se parcial ou negado
+    timestamp: 1234567890000,
+    data: "09/06/2026"
   }
 ];
 
-// Flags de ativação
-const rg_activated = "1"; // string (presença = ativado)
-const rg_act_date = "2024-01-10"; // data de ativação
-const rg_deactivated = "1"; // string (presença = desativado)
+// Flags de ativação (lojista.html)
+rg_activated   = "1";         // presença = ativado
+rg_act_date    = "2024-01-10";
+rg_deactivated = "1";         // presença = desativado
 ```
 
 ---
 
-## 📱 UI/UX Notes
+## MCPs Disponíveis
 
-- ✅ Dropdown filtro com `overflow:visible` corrigido
-- ✅ Placeholder dinâmico conforme filtro selecionado
-- ✅ Dropdown more-horizontal fecha ao clicar em outro
-- ✅ Modal stepper visual (3 etapas)
-- ✅ Cards unificados para diferentes status
-- ✅ Reset corrigido (limpa `rg_deactivated` também)
+| MCP | Uso |
+|-----|-----|
+| **filesystem** | Leitura/escrita em `~/.claude/skills/` |
+| **figma** | Acesso ao Figma Desktop (get_design_context, etc.) |
+| **Claude in Chrome** | Automação do navegador para testes |
 
 ---
 
-## 📋 Checklist de Features
+## Regras de UI — IMPORTANTE
+
+### Botões de ação
+- Usar **sempre SVG inline** para ícones — nunca emojis
+- Padrão dos 3 botões de ação no admin (negar / parcial / aprovar):
+  - "Negar" e "Parcial": `background:#fff; border:1px solid #d1d1e3; color:var(--ns)`
+  - "Aprovar": `background:var(--primary); color:#fff; border:none`
+- Ícones dos botões: SVG `viewBox="0 0 24 24"` stroke, sem fill
+  - Negar: circle + X (`M15 9L9 15M9 9l6 6`)
+  - Parcial: circle + traço (`M8 12h8`)
+  - Aprovar: circle + check (`M9 12l2 2 4-4`)
+- Referência de ícones e tokens: `pedrohenriquevalentim/olist-ds`
+
+### Cores (CSS vars)
+```css
+--primary: #0c29d0
+--primary-base: #043fbe
+--primary-softer: #f0f4fd   /* fundo card Informações lojista */
+--ns: #312f4f                /* texto principal */
+--nm: #5e5d5a                /* texto secundário */
+--nb: #8f8d85                /* labels, placeholders */
+--nsoft: #e8e5d9             /* bordas */
+--bg: #fcfbf8                /* background geral */
+--ok-soft: #c9ffee           /* badge verde fundo */
+--ok-str: #054933            /* badge verde texto */
+```
+
+### Detail View — transição
+- `list-view.hide` usa `position:absolute; visibility:hidden` para sair do fluxo
+- `detail-view` começa `display:none`, só aparece ao chamar `showDetail()`
+- Fade in/out de 200ms via `opacity` + `setTimeout`
+
+---
+
+## UI/UX — Correções Aplicadas
+
+- `overflow:visible` no dropdown de filtro (lojista)
+- Placeholder dinâmico conforme filtro selecionado
+- Dropdown `···` fecha ao clicar em outro
+- Modal stepper visual (3 etapas)
+- Reset limpa `rg_deactivated` também
+- Admin detail view: layout fiel ao Figma — espaço no topo removido, botões sem cor, card Pedido sem border-bottom fantasma
+- Botões substituídos de emojis para SVG inline
+
+---
+
+## Checklist de Features
 
 - [x] Landing page lojista (ativação)
 - [x] Dashboard lojista (3 tabs)
@@ -232,7 +242,8 @@ const rg_deactivated = "1"; // string (presença = desativado)
 - [x] Modal "Ver solicitação"
 - [x] Dropdown mais-opções (···)
 - [x] Dashboard admin (2 tabs)
-- [x] Admin detalhe + drawers
+- [x] Admin detail view — nova página com fade (fiel ao Figma)
+- [x] Drawers aprovar / parcial / negar
 - [x] Seed de dados (5 itens)
 - [x] localStorage persistence
 - [ ] Validações avançadas
@@ -242,34 +253,15 @@ const rg_deactivated = "1"; // string (presença = desativado)
 
 ---
 
-## 🚀 Próximos Passos
+## Próximos Passos
 
-1. **Sincronizar Figma** → Exportar tokens/componentes
-2. **Validações** → Adicionar regras de negócio
-3. **Testes** → QA no navegador
-4. **Polish UI** → Micro-interações, animations
-5. **API** → Integração com backend (quando disponível)
-
----
-
-## 📞 Referências Rápidas
-
-**Figma Design File:**
-```
-https://www.figma.com/design/UNY8LMXVndJBSirtTuTGbP/Reembolso-Garantido
-```
-
-**GitHub Repo:**
-```
-https://github.com/jonprofissionalux-cloud/Reembolso-Envios
-```
-
-**Pages ao vivo:**
-```
-https://jonprofissionalux-cloud.github.io/Reembolso-Envios/
-```
+1. Sincronizar tokens do Figma com `pedrohenriquevalentim/olist-ds`
+2. Substituir ícones SVG inline pelos componentes do DS
+3. Validações de negócio
+4. QA no navegador (Chrome MCP)
+5. Integração com backend (quando disponível)
 
 ---
 
-**Última atualização**: Junho 2026  
+**Última atualização**: Junho 2026
 **Mantido por**: Jonathan Azzolini
